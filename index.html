@@ -123,27 +123,49 @@
     50% { opacity: 0.9; }
   }
 
-  #modo {
+  #controles {
     position: fixed;
     top: 20px;
     right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+  }
+
+  .botao-controle {
     color: rgba(255, 255, 255, 0.5);
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    font-size: 16px;
     cursor: pointer;
-    padding: 8px 16px;
+    padding: 8px 14px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 20px;
     transition: all 0.3s;
     background: rgba(255, 255, 255, 0.05);
-    z-index: 10;
     touch-action: manipulation;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 36px;
   }
 
-  #modo:hover {
+  .botao-controle:hover {
     background: rgba(255, 255, 255, 0.15);
     color: rgba(255, 255, 255, 0.9);
+  }
+
+  .botao-controle.ativo {
+    background: rgba(255, 220, 60, 0.2);
+    border-color: rgba(255, 220, 60, 0.6);
+    color: rgba(255, 220, 60, 1);
+  }
+
+  #modo {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 8px 16px;
   }
 
   #combo {
@@ -245,7 +267,11 @@
   <div id="progresso"><div id="barra"></div></div>
 </div>
 
-<div id="modo">MODO ZEN</div>
+<div id="controles">
+  <button class="botao-controle ativo" id="botaoSom" title="Ligar/desligar som">🔊</button>
+  <button class="botao-controle" id="modo">MODO ZEN</button>
+</div>
+
 <div id="combo"></div>
 
 <div id="overlay">
@@ -262,6 +288,7 @@ const ctx = canvas.getContext('2d');
 const estouradasEl = document.getElementById('estouradas');
 const recordeEl = document.getElementById('recordeValor');
 const modoEl = document.getElementById('modo');
+const botaoSomEl = document.getElementById('botaoSom');
 const instrucaoEl = document.getElementById('instrucao');
 const comboEl = document.getElementById('combo');
 const numeroFaseEl = document.getElementById('numeroFase');
@@ -284,16 +311,91 @@ let combosNecessarios = 3;
 let jogoPausado = false;
 let velocidadeMultiplicador = 1.0;
 
+// SOM
+let somLigado = true;
+let audioContext = null;
+
+// Inicializa o audio (precisa de interação do usuário)
+function initAudio() {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioContext.state === 'suspended') {
+    audioContext.resume();
+  }
+}
+
+// Toca um "pop" sintetizado
+function tocarPop(frequenciaBase = 600) {
+  if (!somLigado || !audioContext) return;
+
+  const agora = audioContext.currentTime;
+
+  // Oscilador principal
+  const osc = audioContext.createOscillator();
+  const ganho = audioContext.createOscillator ? audioContext.createGain() : audioContext.createGain();
+
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(frequenciaBase, agora);
+  osc.frequency.exponentialRampToValueAtTime(frequenciaBase * 2.5, agora + 0.08);
+  osc.frequency.exponentialRampToValueAtTime(frequenciaBase * 0.5, agora + 0.15);
+
+  ganho.gain.setValueAtTime(0.0001, agora);
+  ganho.gain.exponentialRampToValueAtTime(0.15, agora + 0.01);
+  ganho.gain.exponentialRampToValueAtTime(0.0001, agora + 0.15);
+
+  osc.connect(ganho);
+  ganho.connect(audioContext.destination);
+
+  osc.start(agora);
+  osc.stop(agora + 0.15);
+}
+
+// Toca um som de combo (mais agudo e "premiado")
+function tocarCombo() {
+  if (!somLigado || !audioContext) return;
+
+  const agora = audioContext.currentTime;
+
+  // Dois tons rápidos
+  [880, 1320].forEach((freq, i) => {
+    const osc = audioContext.createOscillator();
+    const ganho = audioContext.createGain();
+    const inicio = agora + i * 0.08;
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, inicio);
+
+    ganho.gain.setValueAtTime(0.0001, inicio);
+    ganho.gain.exponentialRampToValueAtTime(0.12, inicio + 0.01);
+    ganho.gain.exponentialRampToValueAtTime(0.0001, inicio + 0.15);
+
+    osc.connect(ganho);
+    ganho.connect(audioContext.destination);
+
+    osc.start(inicio);
+    osc.stop(inicio + 0.15);
+  });
+}
+
 const tipos = [
-  { cor: 'rgba(255, 70, 90, 0.9)',   numero: 1, nome: 'vermelho-1' },
-  { cor: 'rgba(60, 130, 255, 0.9)',  numero: 2, nome: 'azul-2' },
-  { cor: 'rgba(70, 220, 120, 0.9)',  numero: 3, nome: 'verde-3' },
-  { cor: 'rgba(255, 220, 60, 0.9)',  numero: 4, nome: 'amarelo-4' },
-  { cor: 'rgba(180, 100, 255, 0.9)', numero: 5, nome: 'roxo-5' },
+  { cor: 'rgba(255, 70, 90, 0.9)',   numero: 1, nome: 'vermelho-1', som: 400 },
+  { cor: 'rgba(60, 130, 255, 0.9)',  numero: 2, nome: 'azul-2',     som: 500 },
+  { cor: 'rgba(70, 220, 120, 0.9)',  numero: 3, nome: 'verde-3',    som: 600 },
+  { cor: 'rgba(255, 220, 60, 0.9)',  numero: 4, nome: 'amarelo-4',  som: 700 },
+  { cor: 'rgba(180, 100, 255, 0.9)', numero: 5, nome: 'roxo-5',     som: 800 },
 ];
 
 let recorde = parseInt(localStorage.getItem('recordeBolhas') || '0');
 recordeEl.textContent = recorde;
+
+// Preferência de som salva
+let prefSom = localStorage.getItem('somLigado');
+if (prefSom === 'false') {
+  somLigado = false;
+  botaoSomEl.classList.remove('ativo');
+  botaoSomEl.textContent = '🔇';
+}
 
 function redimensionar() {
   largura = canvas.width = window.innerWidth;
@@ -314,6 +416,7 @@ function criarBolha() {
     cor: tipo.cor,
     numero: tipo.numero,
     tipoNome: tipo.nome,
+    som: tipo.som,
     velocidade: (0.4 + Math.random() * 0.5) * velocidadeMultiplicador,
     oscilacao: Math.random() * Math.PI * 2,
     oscilacaoVelocidade: 0.01 + Math.random() * 0.02,
@@ -491,12 +594,16 @@ function proximaFase() {
 function clicar(x, y) {
   if (jogoPausado) return;
 
+  // Inicia o áudio na primeira interação
+  initAudio();
+
   for (let i = bolhas.length - 1; i >= 0; i--) {
     const b = bolhas[i];
     const dist = Math.hypot(x - b.x, y - b.y);
     if (dist < b.raio) {
 
       if (modoZen) {
+        tocarPop(b.som);
         criarParticulas(b.x, b.y, b.cor);
         bolhas.splice(i, 1);
         estouradas++;
@@ -514,6 +621,7 @@ function clicar(x, y) {
       if (bolhasSelecionadas.length === 0) {
         b.selecionada = true;
         bolhasSelecionadas.push(b);
+        tocarPop(b.som * 0.8);
         return;
       }
 
@@ -522,6 +630,7 @@ function clicar(x, y) {
       if (b.tipoNome === primeira.tipoNome) {
         b.selecionada = true;
         bolhasSelecionadas.push(b);
+        tocarPop(b.som * 0.8);
 
         if (bolhasSelecionadas.length === 3) {
           estouradas += 3;
@@ -529,6 +638,7 @@ function clicar(x, y) {
           atualizarContador();
           atualizarBarraProgresso();
           mostrarCombo('COMBO! +3', primeira.cor);
+          tocarCombo();
 
           bolhasSelecionadas.forEach(sel => {
             criarParticulas(sel.x, sel.y, sel.cor, 20);
@@ -549,6 +659,7 @@ function clicar(x, y) {
         limparSelecionadas();
         b.selecionada = true;
         bolhasSelecionadas.push(b);
+        tocarPop(b.som * 0.8);
       }
       return;
     }
@@ -557,7 +668,6 @@ function clicar(x, y) {
   limparSelecionadas();
 }
 
-// CORREÇÃO: pointerdown resolve duplo toque no celular
 canvas.addEventListener('pointerdown', (e) => {
   e.preventDefault();
   clicar(e.clientX, e.clientY);
@@ -570,6 +680,17 @@ modoEl.addEventListener('click', () => {
   document.getElementById('fase').style.opacity = modoZen ? '0.3' : '1';
   instrucaoEl.textContent = modoZen ? 'Modo Zen - estoure qualquer bolha' : 'Junte 3 bolhas com a MESMA cor e o MESMO número!';
   limparSelecionadas();
+});
+
+botaoSomEl.addEventListener('click', () => {
+  somLigado = !somLigado;
+  localStorage.setItem('somLigado', somLigado);
+  botaoSomEl.classList.toggle('ativo', somLigado);
+  botaoSomEl.textContent = somLigado ? '🔊' : '🔇';
+  if (somLigado) {
+    initAudio();
+    tocarPop(600);
+  }
 });
 
 overlayBotaoEl.addEventListener('click', proximaFase);

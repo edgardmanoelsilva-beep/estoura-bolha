@@ -71,6 +71,7 @@
     pointer-events: none;
     text-align: center;
     font-weight: 300;
+    z-index: 5;
   }
 
   #fase .titulo {
@@ -128,8 +129,11 @@
     top: 20px;
     right: 20px;
     display: flex;
-    gap: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
     z-index: 10;
+    justify-content: flex-end;
+    max-width: 60vw;
   }
 
   .botao-controle {
@@ -148,6 +152,7 @@
     justify-content: center;
     min-width: 44px;
     min-height: 36px;
+    white-space: nowrap;
   }
 
   .botao-controle:hover {
@@ -166,6 +171,16 @@
     letter-spacing: 2px;
     text-transform: uppercase;
     padding: 8px 16px;
+  }
+
+  #idioma {
+    font-size: 18px;
+    padding: 8px 12px;
+  }
+
+  #modoEdu {
+    font-size: 14px;
+    padding: 8px 12px;
   }
 
   #combo {
@@ -249,6 +264,42 @@
     background: rgba(255, 255, 255, 0.25);
     transform: scale(1.05);
   }
+
+  /* Em telas pequenas, empilha os botões */
+  @media (max-width: 700px) {
+    #controles {
+      max-width: 75vw;
+      gap: 6px;
+    }
+
+    .botao-controle {
+      font-size: 14px;
+      padding: 6px 10px;
+      min-width: 38px;
+      min-height: 32px;
+    }
+
+    #modo {
+      font-size: 10px;
+      padding: 6px 12px;
+    }
+
+    #idioma {
+      font-size: 16px;
+    }
+
+    #modoEdu {
+      font-size: 12px;
+    }
+
+    #fase .numero {
+      font-size: 28px;
+    }
+
+    #estouradas {
+      font-size: 32px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -269,6 +320,9 @@
 
 <div id="controles">
   <button class="botao-controle ativo" id="botaoSom" title="Ligar/desligar som">🔊</button>
+  <button class="botao-controle" id="botaoVoz" title="Ligar/desligar voz">🗣️</button>
+  <button class="botao-controle" id="idioma" title="Mudar idioma">🇧🇷</button>
+  <button class="botao-controle" id="modoEdu" title="Modo educativo">🎓 OFF</button>
   <button class="botao-controle" id="modo">MODO ZEN</button>
 </div>
 
@@ -289,6 +343,9 @@ const estouradasEl = document.getElementById('estouradas');
 const recordeEl = document.getElementById('recordeValor');
 const modoEl = document.getElementById('modo');
 const botaoSomEl = document.getElementById('botaoSom');
+const botaoVozEl = document.getElementById('botaoVoz');
+const idiomaEl = document.getElementById('idioma');
+const modoEduEl = document.getElementById('modoEdu');
 const instrucaoEl = document.getElementById('instrucao');
 const comboEl = document.getElementById('combo');
 const numeroFaseEl = document.getElementById('numeroFase');
@@ -315,7 +372,72 @@ let velocidadeMultiplicador = 1.0;
 let somLigado = true;
 let audioContext = null;
 
-// Inicializa o audio (precisa de interação do usuário)
+// VOZ
+let vozLigada = false;
+let idioma = 'pt'; // 'pt' ou 'en'
+let modoEducativo = 'off'; // 'off', 'numeros', 'cores', 'ambos'
+
+// Textos em PT e EN
+const textos = {
+  numeros: {
+    pt: { 1: 'um', 2: 'dois', 3: 'três', 4: 'quatro', 5: 'cinco' },
+    en: { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five' }
+  },
+  cores: {
+    pt: { 1: 'vermelho', 2: 'azul', 3: 'verde', 4: 'amarelo', 5: 'roxo' },
+    en: { 1: 'red', 2: 'blue', 3: 'green', 4: 'yellow', 5: 'purple' }
+  }
+};
+
+const tipos = [
+  { cor: 'rgba(255, 70, 90, 0.9)',   numero: 1, nome: 'vermelho-1', som: 400 },
+  { cor: 'rgba(60, 130, 255, 0.9)',  numero: 2, nome: 'azul-2',     som: 500 },
+  { cor: 'rgba(70, 220, 120, 0.9)',  numero: 3, nome: 'verde-3',    som: 600 },
+  { cor: 'rgba(255, 220, 60, 0.9)',  numero: 4, nome: 'amarelo-4',  som: 700 },
+  { cor: 'rgba(180, 100, 255, 0.9)', numero: 5, nome: 'roxo-5',     som: 800 },
+];
+
+let recorde = parseInt(localStorage.getItem('recordeBolhas') || '0');
+recordeEl.textContent = recorde;
+
+// ============ PREFERÊNCIAS SALVAS ============
+let prefSom = localStorage.getItem('somLigado');
+if (prefSom === 'false') {
+  somLigado = false;
+  botaoSomEl.classList.remove('ativo');
+  botaoSomEl.textContent = '🔇';
+}
+
+let prefVoz = localStorage.getItem('vozLigada');
+if (prefVoz === 'true') {
+  vozLigada = true;
+  botaoVozEl.classList.add('ativo');
+}
+
+let prefIdioma = localStorage.getItem('idioma');
+if (prefIdioma === 'en') {
+  idioma = 'en';
+  idiomaEl.textContent = '🇺🇸';
+}
+
+let prefModoEdu = localStorage.getItem('modoEducativo');
+if (prefModoEdu) {
+  modoEducativo = prefModoEdu;
+  atualizarBotaoModoEdu();
+}
+
+function atualizarBotaoModoEdu() {
+  const labels = {
+    'off': '🎓 OFF',
+    'numeros': '🎓 123',
+    'cores': '🎓 🎨',
+    'ambos': '🎓 123🎨'
+  };
+  modoEduEl.textContent = labels[modoEducativo] || '🎓 OFF';
+  modoEduEl.classList.toggle('ativo', modoEducativo !== 'off');
+}
+
+// ============ ÁUDIO (SOM) ============
 function initAudio() {
   if (!audioContext) {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -325,15 +447,12 @@ function initAudio() {
   }
 }
 
-// Toca um "pop" sintetizado
 function tocarPop(frequenciaBase = 600) {
   if (!somLigado || !audioContext) return;
 
   const agora = audioContext.currentTime;
-
-  // Oscilador principal
   const osc = audioContext.createOscillator();
-  const ganho = audioContext.createOscillator ? audioContext.createGain() : audioContext.createGain();
+  const ganho = audioContext.createGain();
 
   osc.type = 'sine';
   osc.frequency.setValueAtTime(frequenciaBase, agora);
@@ -351,13 +470,10 @@ function tocarPop(frequenciaBase = 600) {
   osc.stop(agora + 0.15);
 }
 
-// Toca um som de combo (mais agudo e "premiado")
 function tocarCombo() {
   if (!somLigado || !audioContext) return;
 
   const agora = audioContext.currentTime;
-
-  // Dois tons rápidos
   [880, 1320].forEach((freq, i) => {
     const osc = audioContext.createOscillator();
     const ganho = audioContext.createGain();
@@ -378,24 +494,44 @@ function tocarCombo() {
   });
 }
 
-const tipos = [
-  { cor: 'rgba(255, 70, 90, 0.9)',   numero: 1, nome: 'vermelho-1', som: 400 },
-  { cor: 'rgba(60, 130, 255, 0.9)',  numero: 2, nome: 'azul-2',     som: 500 },
-  { cor: 'rgba(70, 220, 120, 0.9)',  numero: 3, nome: 'verde-3',    som: 600 },
-  { cor: 'rgba(255, 220, 60, 0.9)',  numero: 4, nome: 'amarelo-4',  som: 700 },
-  { cor: 'rgba(180, 100, 255, 0.9)', numero: 5, nome: 'roxo-5',     som: 800 },
-];
+// ============ VOZ ============
+function falar(texto) {
+  if (!vozLigada) return;
+  if (!('speechSynthesis' in window)) return;
 
-let recorde = parseInt(localStorage.getItem('recordeBolhas') || '0');
-recordeEl.textContent = recorde;
+  // Cancela falas anteriores pra não acumular
+  window.speechSynthesis.cancel();
 
-// Preferência de som salva
-let prefSom = localStorage.getItem('somLigado');
-if (prefSom === 'false') {
-  somLigado = false;
-  botaoSomEl.classList.remove('ativo');
-  botaoSomEl.textContent = '🔇';
+  const utterance = new SpeechSynthesisUtterance(texto);
+  utterance.lang = idioma === 'pt' ? 'pt-BR' : 'en-US';
+  utterance.rate = 0.9;  // um pouco mais devagar (pra criança entender)
+  utterance.pitch = 1.1; // um pouco mais agudo (amigável)
+  utterance.volume = 0.8;
+
+  window.speechSynthesis.speak(utterance);
 }
+
+function falarCombo(numero, corNome) {
+  if (!vozLigada || modoEducativo === 'off') return;
+
+  const idiomaAtual = idioma;
+  let texto = '';
+
+  if (modoEducativo === 'numeros') {
+    texto = textos.numeros[idiomaAtual][numero];
+  } else if (modoEducativo === 'cores') {
+    texto = textos.cores[idiomaAtual][corNome];
+  } else if (modoEducativo === 'ambos') {
+    texto = textos.numeros[idiomaAtual][numero] + ', ' + textos.cores[idiomaAtual][corNome];
+  }
+
+  if (texto) {
+    // Pequeno delay pra não competir com o som de combo
+    setTimeout(() => falar(texto), 300);
+  }
+}
+
+// ============ FIM ÁUDIO ============
 
 function redimensionar() {
   largura = canvas.width = window.innerWidth;
@@ -594,7 +730,6 @@ function proximaFase() {
 function clicar(x, y) {
   if (jogoPausado) return;
 
-  // Inicia o áudio na primeira interação
   initAudio();
 
   for (let i = bolhas.length - 1; i >= 0; i--) {
@@ -639,6 +774,9 @@ function clicar(x, y) {
           atualizarBarraProgresso();
           mostrarCombo('COMBO! +3', primeira.cor);
           tocarCombo();
+
+          // Fala o número e/ou cor
+          falarCombo(primeira.numero, primeira.numero);
 
           bolhasSelecionadas.forEach(sel => {
             criarParticulas(sel.x, sel.y, sel.cor, 20);
@@ -690,6 +828,45 @@ botaoSomEl.addEventListener('click', () => {
   if (somLigado) {
     initAudio();
     tocarPop(600);
+  }
+});
+
+botaoVozEl.addEventListener('click', () => {
+  vozLigada = !vozLigada;
+  localStorage.setItem('vozLigada', vozLigada);
+  botaoVozEl.classList.toggle('ativo', vozLigada);
+  if (vozLigada) {
+    // Fala uma amostra pra confirmar que tá funcionando
+    setTimeout(() => falar(idioma === 'pt' ? 'Voz ativada' : 'Voice on'), 100);
+  }
+});
+
+idiomaEl.addEventListener('click', () => {
+  idioma = idioma === 'pt' ? 'en' : 'pt';
+  localStorage.setItem('idioma', idioma);
+  idiomaEl.textContent = idioma === 'pt' ? '🇧🇷' : '🇺🇸';
+
+  // Feedback
+  if (vozLigada) {
+    setTimeout(() => falar(idioma === 'pt' ? 'Português' : 'English'), 100);
+  }
+});
+
+modoEduEl.addEventListener('click', () => {
+  const modos = ['off', 'numeros', 'cores', 'ambos'];
+  const atual = modos.indexOf(modoEducativo);
+  modoEducativo = modos[(atual + 1) % modos.length];
+  localStorage.setItem('modoEducativo', modoEducativo);
+  atualizarBotaoModoEdu();
+
+  // Feedback
+  if (vozLigada && modoEducativo !== 'off') {
+    const exemplos = {
+      'numeros': idioma === 'pt' ? 'dois' : 'two',
+      'cores': idioma === 'pt' ? 'vermelho' : 'red',
+      'ambos': idioma === 'pt' ? 'dois, vermelho' : 'two, red'
+    };
+    setTimeout(() => falar(exemplos[modoEducativo]), 100);
   }
 });
 

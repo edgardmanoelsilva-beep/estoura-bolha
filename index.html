@@ -10,6 +10,7 @@
     padding: 0;
     box-sizing: border-box;
     user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
@@ -18,12 +19,14 @@
     overflow: hidden;
     height: 100vh;
     cursor: crosshair;
+    touch-action: manipulation;
   }
 
   #canvas {
     display: block;
     width: 100vw;
     height: 100vh;
+    touch-action: manipulation;
   }
 
   #ui {
@@ -112,6 +115,7 @@
     pointer-events: none;
     animation: fadeInOut 3s ease-in-out infinite;
     text-align: center;
+    padding: 0 20px;
   }
 
   @keyframes fadeInOut {
@@ -134,6 +138,7 @@
     transition: all 0.3s;
     background: rgba(255, 255, 255, 0.05);
     z-index: 10;
+    touch-action: manipulation;
   }
 
   #modo:hover {
@@ -178,6 +183,7 @@
     transition: opacity 0.5s;
     z-index: 20;
     text-align: center;
+    padding: 20px;
   }
 
   #overlay.mostrar {
@@ -186,7 +192,7 @@
   }
 
   #overlay h1 {
-    font-size: 72px;
+    font-size: 56px;
     font-weight: 200;
     margin-bottom: 20px;
     text-shadow: 0 0 40px rgba(255, 255, 255, 0.6);
@@ -214,6 +220,7 @@
     border-radius: 30px;
     transition: all 0.3s;
     font-family: inherit;
+    touch-action: manipulation;
   }
 
   #overlay button:hover {
@@ -269,7 +276,7 @@ let bolhas = [];
 let particulas = [];
 let estouradas = 0;
 let modoZen = false;
-let selecionadas = [];
+let bolhasSelecionadas = [];
 
 let fase = 1;
 let combosFeitos = 0;
@@ -277,13 +284,12 @@ let combosNecessarios = 3;
 let jogoPausado = false;
 let velocidadeMultiplicador = 1.0;
 
-// Cada tipo tem cor + número (os dois juntos identificam a bolha)
 const tipos = [
-  { cor: 'rgba(255, 70, 90, 0.9)',   numero: 1, nome: 'vermelho-1', textoCor: '#ff465a' },
-  { cor: 'rgba(60, 130, 255, 0.9)',  numero: 2, nome: 'azul-2',     textoCor: '#3c82ff' },
-  { cor: 'rgba(70, 220, 120, 0.9)',  numero: 3, nome: 'verde-3',    textoCor: '#46dc78' },
-  { cor: 'rgba(255, 220, 60, 0.9)',  numero: 4, nome: 'amarelo-4',  textoCor: '#ffdc3c' },
-  { cor: 'rgba(180, 100, 255, 0.9)', numero: 5, nome: 'roxo-5',     textoCor: '#b464ff' },
+  { cor: 'rgba(255, 70, 90, 0.9)',   numero: 1, nome: 'vermelho-1' },
+  { cor: 'rgba(60, 130, 255, 0.9)',  numero: 2, nome: 'azul-2' },
+  { cor: 'rgba(70, 220, 120, 0.9)',  numero: 3, nome: 'verde-3' },
+  { cor: 'rgba(255, 220, 60, 0.9)',  numero: 4, nome: 'amarelo-4' },
+  { cor: 'rgba(180, 100, 255, 0.9)', numero: 5, nome: 'roxo-5' },
 ];
 
 let recorde = parseInt(localStorage.getItem('recordeBolhas') || '0');
@@ -301,6 +307,7 @@ function criarBolha() {
   const raio = 35 + Math.random() * 25;
   const tipo = tipos[Math.floor(Math.random() * tipos.length)];
   return {
+    id: Math.random().toString(36).substring(2, 9),
     x: Math.random() * (largura - raio * 2) + raio,
     y: altura + raio,
     raio: raio,
@@ -360,7 +367,6 @@ function desenhar() {
       const escalaAlvo = b.selecionada ? 1.15 : 1.0;
       b.escala += (escalaAlvo - b.escala) * 0.15;
 
-      // Halo de seleção
       if (b.selecionada) {
         ctx.beginPath();
         ctx.arc(b.x, b.y, b.raio * b.escala + 8, 0, Math.PI * 2);
@@ -369,7 +375,6 @@ function desenhar() {
         ctx.stroke();
       }
 
-      // Bolha com gradiente
       const grad = ctx.createRadialGradient(
         b.x - b.raio * 0.3, b.y - b.raio * 0.3, b.raio * 0.1,
         b.x, b.y, b.raio * b.escala
@@ -383,26 +388,24 @@ function desenhar() {
       ctx.fillStyle = grad;
       ctx.fill();
 
-      // Brilho
       ctx.beginPath();
       ctx.arc(b.x - b.raio * 0.3, b.y - b.raio * 0.3, b.raio * 0.18, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
       ctx.fill();
 
-      // NÚMERO dentro da bolha
       ctx.save();
       ctx.font = `bold ${b.raio * 0.9}px 'Segoe UI', sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      // Sombra no texto pra dar contraste
       ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
       ctx.fillText(b.numero, b.x + 2, b.y + 2);
-      // Texto branco
       ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
       ctx.fillText(b.numero, b.x, b.y);
       ctx.restore();
 
       if (b.y + b.raio < 0) {
+        const idxSel = bolhasSelecionadas.indexOf(b);
+        if (idxSel > -1) bolhasSelecionadas.splice(idxSel, 1);
         bolhas.splice(i, 1);
       }
     }
@@ -443,10 +446,10 @@ function gerarBolhas() {
 }
 
 function limparSelecionadas() {
-  selecionadas.forEach(idx => {
-    if (bolhas[idx]) bolhas[idx].selecionada = false;
+  bolhasSelecionadas.forEach(b => {
+    b.selecionada = false;
   });
-  selecionadas = [];
+  bolhasSelecionadas = [];
 }
 
 function atualizarContador() {
@@ -479,7 +482,7 @@ function proximaFase() {
 
   bolhas = [];
   particulas = [];
-  selecionadas = [];
+  bolhasSelecionadas = [];
   jogoPausado = false;
 
   overlayEl.classList.remove('mostrar');
@@ -503,40 +506,40 @@ function clicar(x, y) {
 
       if (b.selecionada) {
         b.selecionada = false;
-        selecionadas = selecionadas.filter(idx => bolhas[idx] !== b);
+        const idxSel = bolhasSelecionadas.indexOf(b);
+        if (idxSel > -1) bolhasSelecionadas.splice(idxSel, 1);
         return;
       }
 
-      if (selecionadas.length === 0) {
+      if (bolhasSelecionadas.length === 0) {
         b.selecionada = true;
-        selecionadas.push(i);
+        bolhasSelecionadas.push(b);
         return;
       }
 
-      const primeiraSelecionada = bolhas[selecionadas[0]];
+      const primeira = bolhasSelecionadas[0];
 
-      // Precisa ter MESMO tipo (mesma cor E mesmo número)
-      if (b.tipoNome === primeiraSelecionada.tipoNome) {
+      if (b.tipoNome === primeira.tipoNome) {
         b.selecionada = true;
-        selecionadas.push(i);
+        bolhasSelecionadas.push(b);
 
-        if (selecionadas.length === 3) {
+        if (bolhasSelecionadas.length === 3) {
           estouradas += 3;
           combosFeitos++;
           atualizarContador();
           atualizarBarraProgresso();
-          mostrarCombo('COMBO! +3', primeiraSelecionada.cor);
+          mostrarCombo('COMBO! +3', primeira.cor);
 
-          selecionadas.forEach(idx => {
-            if (bolhas[idx]) {
-              criarParticulas(bolhas[idx].x, bolhas[idx].y, bolhas[idx].cor, 20);
-            }
+          bolhasSelecionadas.forEach(sel => {
+            criarParticulas(sel.x, sel.y, sel.cor, 20);
           });
 
-          const paraRemover = [...selecionadas].sort((a, b) => b - a);
-          paraRemover.forEach(idx => bolhas.splice(idx, 1));
+          bolhasSelecionadas.forEach(sel => {
+            const idx = bolhas.indexOf(sel);
+            if (idx > -1) bolhas.splice(idx, 1);
+          });
 
-          selecionadas = [];
+          bolhasSelecionadas = [];
 
           if (combosFeitos >= combosNecessarios) {
             setTimeout(passarDeFase, 500);
@@ -545,7 +548,7 @@ function clicar(x, y) {
       } else {
         limparSelecionadas();
         b.selecionada = true;
-        selecionadas.push(i);
+        bolhasSelecionadas.push(b);
       }
       return;
     }
@@ -554,13 +557,11 @@ function clicar(x, y) {
   limparSelecionadas();
 }
 
-canvas.addEventListener('mousedown', (e) => clicar(e.clientX, e.clientY));
-canvas.addEventListener('touchstart', (e) => {
+// CORREÇÃO: pointerdown resolve duplo toque no celular
+canvas.addEventListener('pointerdown', (e) => {
   e.preventDefault();
-  for (const touch of e.touches) {
-    clicar(touch.clientX, touch.clientY);
-  }
-}, { passive: false });
+  clicar(e.clientX, e.clientY);
+});
 
 modoEl.addEventListener('click', () => {
   modoZen = !modoZen;
@@ -582,7 +583,7 @@ document.addEventListener('keydown', (e) => {
     estouradas = 0;
     bolhas = [];
     particulas = [];
-    selecionadas = [];
+    bolhasSelecionadas = [];
     jogoPausado = false;
     numeroFaseEl.textContent = 1;
     atualizarContador();

@@ -30,7 +30,6 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
   padding-top: 40px;
 }
 
-/* Idiomas no topo */
 .idiomas-topo {
   position: absolute;
   top: 20px;
@@ -59,16 +58,13 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
   touch-action: manipulation;
   letter-spacing: 1px;
 }
-
 .botao-idioma:active { transform: scale(0.95); }
-
 .botao-idioma.ativo {
   background: linear-gradient(135deg, #ffdc3c 0%, #ff9a3c 100%);
   border-color: transparent;
   box-shadow: 0 4px 15px rgba(255, 220, 60, 0.5);
 }
 
-/* Engrenagem no canto */
 .botao-config-inicial {
   position: absolute;
   top: 20px;
@@ -94,7 +90,6 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
 @keyframes pulsarLogo { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 .logo-sub { font-size: 18px; color: rgba(255,255,255,0.9); font-weight: 400; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
 
-/* Pergunta */
 .pergunta {
   font-size: 20px;
   font-weight: 700;
@@ -105,7 +100,6 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
   text-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
-/* Botões de aprendizado */
 .opcoes-aprender {
   display: flex;
   flex-wrap: wrap;
@@ -136,21 +130,14 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
   touch-action: manipulation;
   backdrop-filter: blur(10px);
 }
-
-.botao-aprender .emoji {
-  font-size: 36px;
-  line-height: 1;
-}
-
+.botao-aprender .emoji { font-size: 36px; line-height: 1; }
 .botao-aprender:active { transform: scale(0.95); }
-
 .botao-aprender.ativo {
   background: linear-gradient(135deg, #ffdc3c 0%, #ff9a3c 100%);
   border-color: transparent;
   box-shadow: 0 6px 20px rgba(255, 220, 60, 0.5);
 }
 
-/* Botão INICIAR */
 .botao-iniciar {
   font-size: 28px;
   font-weight: 800;
@@ -229,23 +216,17 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
 </head>
 <body>
 
-<!-- ==================== TELA INICIAL ==================== -->
 <div class="tela ativa" id="telaInicial">
   <div class="bolhas-fundo" id="bolhasFundo"></div>
-
   <div class="idiomas-topo">
     <button class="botao-idioma ativo" data-idioma="pt">🇧🇷 PT</button>
     <button class="botao-idioma" data-idioma="en">🇺🇸 EN</button>
   </div>
-
   <button class="botao-config-inicial" id="btnAbrirConfig" title="Configurações">⚙️</button>
-
   <div class="conteudo">
     <div class="logo-titulo">Bolha Kids</div>
     <div class="logo-sub" id="subtitulo">Aprender Brincando</div>
-
     <div class="pergunta" id="perguntaAprender">O que aprender?</div>
-
     <div class="opcoes-aprender">
       <button class="botao-aprender ativo" data-modo="numeros">
         <span class="emoji">🔢</span>
@@ -260,14 +241,12 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
         <span id="labelAmbos">Ambos</span>
       </button>
     </div>
-
     <button class="botao-iniciar" id="btnIniciar">
       <span id="labelIniciar">▶ Iniciar</span>
     </button>
   </div>
 </div>
 
-<!-- ==================== TELA DE JOGO ==================== -->
 <div class="tela" id="telaJogo">
   <canvas id="canvas"></canvas>
   <div class="controles-jogo">
@@ -290,14 +269,12 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
     <p id="overlayTexto">Próxima fase em breve</p>
     <button id="overlayBotao">Continuar</button>
   </div>
-  <div id="instrucao" class="instrucao-texto">Junte 3 bolhas iguais!</div>
+  <div id="instrucao">Junte 3 bolhas iguais!</div>
 </div>
 
-<!-- ==================== TELA DE CONFIGURAÇÕES ==================== -->
 <div class="tela" id="telaConfig">
   <button class="botao-voltar" id="btnVoltar" title="Voltar">←</button>
   <div class="config-titulo">⚙️ <span id="configTitulo">Configurações</span></div>
-
   <div class="config-item">
     <div class="rotulo"><span class="icone">🔊</span> <span id="labelSom">Som</span></div>
     <div class="opcoes" id="opcoesSom">
@@ -305,7 +282,6 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
       <button class="opcao" data-valor="off" id="opSomOff">Desligado</button>
     </div>
   </div>
-
   <div class="config-item">
     <div class="rotulo"><span class="icone">🗣️</span> <span id="labelVoz">Voz</span></div>
     <div class="opcoes" id="opcoesVoz">
@@ -313,7 +289,6 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
       <button class="opcao" data-valor="off" id="opVozOff">Desligada</button>
     </div>
   </div>
-
   <div class="config-item">
     <div class="rotulo"><span class="icone">🧘</span> <span id="labelModo">Modo</span></div>
     <div class="opcoes" id="opcoesModo">
@@ -324,7 +299,6 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
 </div>
 
 <script>
-// ==================== ELEMENTOS ====================
 const telaInicial = document.getElementById('telaInicial');
 const telaJogo = document.getElementById('telaJogo');
 const telaConfig = document.getElementById('telaConfig');
@@ -347,7 +321,6 @@ const overlayTituloEl = document.getElementById('overlayTitulo');
 const overlayTextoEl = document.getElementById('overlayTexto');
 const overlayBotaoEl = document.getElementById('overlayBotao');
 
-// ==================== ESTADO ====================
 let telaAtual = 'inicial';
 let largura = 0, altura = 0;
 let bolhas = [];
@@ -367,7 +340,6 @@ let vozLigada = true;
 let idioma = 'pt';
 let modoEducativo = 'numeros';
 
-// ==================== TEXTOS ====================
 const textos = {
   numeros: {
     pt: { 1: 'um', 2: 'dois', 3: 'três', 4: 'quatro', 5: 'cinco' },
@@ -390,7 +362,8 @@ const traducoes = {
     bolhas: 'bolhas',
     recorde: 'Recorde:',
     fase: 'FASE',
-    instrucao: 'Junte 3 bolhas iguais!',
+    instrucaoNormal: 'Junte 3 bolhas iguais!',
+    instrucaoZen: 'Toque nas bolhas e ouça!',
     faseCompleta: 'FASE COMPLETA!',
     proximaFase: 'Próxima:',
     combos: 'combos',
@@ -404,7 +377,9 @@ const traducoes = {
     desligada: 'Desligada',
     modo: 'Modo',
     normal: 'Normal',
-    zen: 'Zen'
+    zen: 'Zen',
+    vozLigada: 'Voz ligada',
+    portugues: 'Português'
   },
   en: {
     subtitulo: 'Learn by Playing',
@@ -416,7 +391,8 @@ const traducoes = {
     bolhas: 'bubbles',
     recorde: 'Best:',
     fase: 'LEVEL',
-    instrucao: 'Match 3 equal bubbles!',
+    instrucaoNormal: 'Match 3 equal bubbles!',
+    instrucaoZen: 'Tap the bubbles and listen!',
     faseCompleta: 'LEVEL COMPLETE!',
     proximaFase: 'Next:',
     combos: 'combos',
@@ -430,7 +406,9 @@ const traducoes = {
     desligada: 'Off',
     modo: 'Mode',
     normal: 'Normal',
-    zen: 'Zen'
+    zen: 'Zen',
+    vozLigada: 'Voice on',
+    portugues: 'English'
   }
 };
 
@@ -445,10 +423,8 @@ const tipos = [
 let recorde = parseInt(localStorage.getItem('recordeBolhas') || '0');
 recordeEl.textContent = recorde;
 
-// ==================== TRADUÇÃO ====================
 function aplicarTraducoes() {
   const t = traducoes[idioma];
-
   document.getElementById('subtitulo').textContent = t.subtitulo;
   document.getElementById('perguntaAprender').textContent = t.pergunta;
   document.getElementById('labelNumeros').textContent = t.numeros;
@@ -470,11 +446,15 @@ function aplicarTraducoes() {
   document.getElementById('configTitulo').textContent = t.configTitulo;
   document.getElementById('overlayTitulo').textContent = t.faseCompleta;
   document.getElementById('overlayBotao').textContent = t.continuar;
-  document.getElementById('instrucao').textContent = t.instrucao;
-  document.getElementById('labelModo').textContent = t.modo;
+  // Instrução muda conforme o modo
+  atualizarInstrucao();
 }
 
-// ==================== SELEÇÃO DE IDIOMA E APRENDIZADO ====================
+function atualizarInstrucao() {
+  const t = traducoes[idioma];
+  instrucaoEl.textContent = modoZen ? t.instrucaoZen : t.instrucaoNormal;
+}
+
 function atualizarBotoesIdioma() {
   document.querySelectorAll('.botao-idioma').forEach(b => {
     b.classList.toggle('ativo', b.dataset.idioma === idioma);
@@ -495,8 +475,7 @@ document.querySelectorAll('.botao-idioma').forEach(b => {
     aplicarTraducoes();
     initAudio();
     if (vozLigada) {
-      const confirmacao = idioma === 'pt' ? 'Português' : 'English';
-      setTimeout(() => falar(confirmacao), 100);
+      setTimeout(() => falar(traducoes[idioma].portugues), 100);
     }
   });
 });
@@ -517,7 +496,6 @@ document.querySelectorAll('.botao-aprender').forEach(b => {
   });
 });
 
-// ==================== BOLHAS DECORATIVAS ====================
 function criarBolhasDecorativas() {
   const container = document.getElementById('bolhasFundo');
   container.innerHTML = '';
@@ -538,7 +516,6 @@ function criarBolhasDecorativas() {
 }
 criarBolhasDecorativas();
 
-// ==================== NAVEGAÇÃO ====================
 function irParaTela(nomeTela) {
   telaAtual = nomeTela;
   telaInicial.classList.remove('ativa');
@@ -571,6 +548,7 @@ function reiniciarJogo() {
   atualizarContador();
   atualizarBarraProgresso();
   overlayEl.classList.remove('mostrar');
+  atualizarInstrucao();
 }
 
 btnIniciar.addEventListener('click', () => { initAudio(); irParaTela('jogo'); });
@@ -579,7 +557,6 @@ btnConfig.addEventListener('click', () => irParaTela('config'));
 btnHome.addEventListener('click', () => irParaTela('inicial'));
 btnVoltar.addEventListener('click', () => irParaTela('inicial'));
 
-// ==================== ÁUDIO ====================
 function initAudio() {
   if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
   if (audioContext.state === 'suspended') audioContext.resume();
@@ -618,7 +595,6 @@ function tocarCombo() {
   });
 }
 
-// ==================== VOZ ====================
 function falar(texto) {
   if (!vozLigada) return;
   if (!('speechSynthesis' in window)) return;
@@ -642,7 +618,6 @@ function falarCombo(numero) {
   if (texto) setTimeout(() => falar(texto), 250);
 }
 
-// ==================== CONFIG ====================
 function atualizarBotoesConfig() {
   document.querySelectorAll('#opcoesSom .opcao').forEach(b => b.classList.toggle('ativa', b.dataset.valor === (somLigado ? 'on' : 'off')));
   document.querySelectorAll('#opcoesVoz .opcao').forEach(b => b.classList.toggle('ativa', b.dataset.valor === (vozLigada ? 'on' : 'off')));
@@ -660,16 +635,16 @@ document.getElementById('opcoesVoz').addEventListener('click', (e) => {
   if (!e.target.classList.contains('opcao')) return;
   vozLigada = e.target.dataset.valor === 'on';
   atualizarBotoesConfig();
-  if (vozLigada) setTimeout(() => falar(idioma === 'pt' ? 'Voz ligada' : 'Voice on'), 100);
+  if (vozLigada) setTimeout(() => falar(traducoes[idioma].vozLigada), 100);
 });
 
 document.getElementById('opcoesModo').addEventListener('click', (e) => {
   if (!e.target.classList.contains('opcao')) return;
   modoZen = e.target.dataset.valor === 'zen';
   atualizarBotoesConfig();
+  atualizarInstrucao();
 });
 
-// ==================== JOGO ====================
 function redimensionar() {
   if (!canvas) return;
   largura = canvas.width = window.innerWidth;
@@ -845,6 +820,8 @@ function clicar(x, y) {
         bolhas.splice(i, 1);
         estouradas++;
         atualizarContador();
+        // NOVO: fala o número/cor da bolha no modo zen
+        falarCombo(b.numero);
         return;
       }
 
@@ -906,8 +883,7 @@ canvas.addEventListener('pointerdown', (e) => {
 
 overlayBotaoEl.addEventListener('click', proximaFase);
 
-// ==================== INICIALIZAÇÃO ====================
-// Carrega preferências salvas
+// Inicialização
 const idiomaSalvo = localStorage.getItem('idioma');
 if (idiomaSalvo) idioma = idiomaSalvo;
 
@@ -920,7 +896,6 @@ if (somSalvo === 'false') somLigado = false;
 const vozSalva = localStorage.getItem('vozLigada');
 if (vozSalva === 'false') vozLigada = false;
 
-// Aplica estado inicial
 atualizarBotoesIdioma();
 atualizarBotoesAprender();
 aplicarTraducoes();

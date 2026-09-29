@@ -12,19 +12,165 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
 .tela { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 1; }
 .tela.ativa { display: flex; }
 
-#telaInicial { background: linear-gradient(135deg, #667eea 0%, #764ba2 40%, #f093fb 100%); padding: 20px; text-align: center; }
+/* ============ TELA INICIAL ============ */
+#telaInicial { background: linear-gradient(135deg, #667eea 0%, #764ba2 40%, #f093fb 100%); padding: 20px; text-align: center; overflow-y: auto; }
 #telaInicial .bolhas-fundo { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 0; pointer-events: none; }
 .bolha-decorativa { position: absolute; border-radius: 50%; opacity: 0.3; animation: flutuar 8s ease-in-out infinite; }
 @keyframes flutuar { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-30px) scale(1.1); } }
-#telaInicial .conteudo { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 20px; }
-.logo-titulo { font-size: 64px; font-weight: 900; color: white; text-shadow: 0 4px 0 rgba(0,0,0,0.2), 0 8px 20px rgba(0,0,0,0.3); letter-spacing: 2px; line-height: 1; margin-bottom: 10px; animation: pulsarLogo 3s ease-in-out infinite; }
-@keyframes pulsarLogo { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-.logo-sub { font-size: 20px; color: rgba(255,255,255,0.9); font-weight: 400; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 40px; }
-.botao-iniciar { font-size: 32px; font-weight: 800; padding: 25px 70px; background: linear-gradient(135deg, #ffdc3c 0%, #ff9a3c 100%); color: white; border: none; border-radius: 60px; cursor: pointer; box-shadow: 0 10px 0 #cc7a1e, 0 15px 30px rgba(0,0,0,0.3); transition: all 0.15s; font-family: inherit; letter-spacing: 3px; text-transform: uppercase; touch-action: manipulation; }
-.botao-iniciar:active { transform: translateY(6px); box-shadow: 0 4px 0 #cc7a1e, 0 8px 15px rgba(0,0,0,0.3); }
-.botao-config-inicial { position: absolute; top: 20px; right: 20px; width: 60px; height: 60px; font-size: 30px; background: rgba(255,255,255,0.25); border: 2px solid rgba(255,255,255,0.5); border-radius: 50%; cursor: pointer; z-index: 10; transition: all 0.2s; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); touch-action: manipulation; }
+
+#telaInicial .conteudo {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 600px;
+  padding-top: 40px;
+}
+
+/* Idiomas no topo */
+.idiomas-topo {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 12px;
+  z-index: 10;
+}
+
+.botao-idioma {
+  font-size: 16px;
+  font-weight: 700;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+  cursor: pointer;
+  color: white;
+  font-family: inherit;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  backdrop-filter: blur(10px);
+  touch-action: manipulation;
+  letter-spacing: 1px;
+}
+
+.botao-idioma:active { transform: scale(0.95); }
+
+.botao-idioma.ativo {
+  background: linear-gradient(135deg, #ffdc3c 0%, #ff9a3c 100%);
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(255, 220, 60, 0.5);
+}
+
+/* Engrenagem no canto */
+.botao-config-inicial {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 55px;
+  height: 55px;
+  font-size: 26px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  touch-action: manipulation;
+}
 .botao-config-inicial:active { transform: scale(0.9); }
 
+.logo-titulo { font-size: 64px; font-weight: 900; color: white; text-shadow: 0 4px 0 rgba(0,0,0,0.2), 0 8px 20px rgba(0,0,0,0.3); letter-spacing: 2px; line-height: 1; animation: pulsarLogo 3s ease-in-out infinite; }
+@keyframes pulsarLogo { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+.logo-sub { font-size: 18px; color: rgba(255,255,255,0.9); font-weight: 400; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+
+/* Pergunta */
+.pergunta {
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* Botões de aprendizado */
+.opcoes-aprender {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  width: 100%;
+  padding: 0 10px;
+}
+
+.botao-aprender {
+  flex: 1;
+  min-width: 120px;
+  padding: 18px 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 3px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: inherit;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 1px;
+  touch-action: manipulation;
+  backdrop-filter: blur(10px);
+}
+
+.botao-aprender .emoji {
+  font-size: 36px;
+  line-height: 1;
+}
+
+.botao-aprender:active { transform: scale(0.95); }
+
+.botao-aprender.ativo {
+  background: linear-gradient(135deg, #ffdc3c 0%, #ff9a3c 100%);
+  border-color: transparent;
+  box-shadow: 0 6px 20px rgba(255, 220, 60, 0.5);
+}
+
+/* Botão INICIAR */
+.botao-iniciar {
+  font-size: 28px;
+  font-weight: 800;
+  padding: 22px 60px;
+  background: linear-gradient(135deg, #ffdc3c 0%, #ff9a3c 100%);
+  color: white;
+  border: none;
+  border-radius: 60px;
+  cursor: pointer;
+  box-shadow: 0 10px 0 #cc7a1e, 0 15px 30px rgba(0,0,0,0.3);
+  transition: all 0.15s;
+  font-family: inherit;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  touch-action: manipulation;
+  margin-top: 15px;
+}
+.botao-iniciar:active { transform: translateY(6px); box-shadow: 0 4px 0 #cc7a1e, 0 8px 15px rgba(0,0,0,0.3); }
+
+/* ============ TELA DE JOGO ============ */
 #telaJogo { background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
 #canvas { display: block; width: 100vw; height: 100vh; touch-action: manipulation; }
 .controles-jogo { position: fixed; top: 15px; right: 15px; display: flex; gap: 8px; z-index: 10; }
@@ -50,6 +196,7 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
 #overlay button { margin-top: 40px; padding: 18px 50px; background: linear-gradient(135deg, #ffdc3c 0%, #ff9a3c 100%); border: none; color: white; font-size: 18px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; border-radius: 50px; transition: all 0.15s; font-family: inherit; box-shadow: 0 6px 0 #cc7a1e; touch-action: manipulation; }
 #overlay button:active { transform: translateY(4px); box-shadow: 0 2px 0 #cc7a1e; }
 
+/* ============ TELA DE CONFIGURAÇÕES ============ */
 #telaConfig { background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); padding: 20px; overflow-y: auto; justify-content: flex-start; padding-top: 80px; }
 .config-titulo { font-size: 32px; font-weight: 800; color: white; margin-bottom: 30px; letter-spacing: 2px; text-align: center; }
 .config-item { width: 100%; max-width: 500px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 16px 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; color: white; font-size: 16px; font-weight: 500; letter-spacing: 1px; }
@@ -63,9 +210,13 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
 .botao-voltar:active { transform: scale(0.9); }
 
 @media (max-width: 500px) {
-  .logo-titulo { font-size: 48px; }
-  .logo-sub { font-size: 14px; letter-spacing: 3px; }
-  .botao-iniciar { font-size: 24px; padding: 20px 50px; }
+  .logo-titulo { font-size: 44px; }
+  .logo-sub { font-size: 13px; letter-spacing: 2px; }
+  .botao-iniciar { font-size: 22px; padding: 18px 45px; }
+  .botao-aprender { min-width: 100px; padding: 14px 8px; font-size: 14px; }
+  .botao-aprender .emoji { font-size: 28px; }
+  .pergunta { font-size: 16px; }
+  .botao-idioma { font-size: 14px; padding: 8px 16px; }
   #overlay h1 { font-size: 40px; }
   .config-item { flex-direction: column; align-items: flex-start; gap: 10px; }
   .opcoes { width: 100%; justify-content: space-between; }
@@ -78,16 +229,45 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
 </head>
 <body>
 
+<!-- ==================== TELA INICIAL ==================== -->
 <div class="tela ativa" id="telaInicial">
   <div class="bolhas-fundo" id="bolhasFundo"></div>
+
+  <div class="idiomas-topo">
+    <button class="botao-idioma ativo" data-idioma="pt">🇧🇷 PT</button>
+    <button class="botao-idioma" data-idioma="en">🇺🇸 EN</button>
+  </div>
+
   <button class="botao-config-inicial" id="btnAbrirConfig" title="Configurações">⚙️</button>
+
   <div class="conteudo">
     <div class="logo-titulo">Bolha Kids</div>
-    <div class="logo-sub">Aprender Brincando</div>
-    <button class="botao-iniciar" id="btnIniciar">▶ Iniciar</button>
+    <div class="logo-sub" id="subtitulo">Aprender Brincando</div>
+
+    <div class="pergunta" id="perguntaAprender">O que aprender?</div>
+
+    <div class="opcoes-aprender">
+      <button class="botao-aprender ativo" data-modo="numeros">
+        <span class="emoji">🔢</span>
+        <span id="labelNumeros">Números</span>
+      </button>
+      <button class="botao-aprender" data-modo="cores">
+        <span class="emoji">🎨</span>
+        <span id="labelCores">Cores</span>
+      </button>
+      <button class="botao-aprender" data-modo="ambos">
+        <span class="emoji">🔢🎨</span>
+        <span id="labelAmbos">Ambos</span>
+      </button>
+    </div>
+
+    <button class="botao-iniciar" id="btnIniciar">
+      <span id="labelIniciar">▶ Iniciar</span>
+    </button>
   </div>
 </div>
 
+<!-- ==================== TELA DE JOGO ==================== -->
 <div class="tela" id="telaJogo">
   <canvas id="canvas"></canvas>
   <div class="controles-jogo">
@@ -96,11 +276,11 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
   </div>
   <div id="ui">
     <span id="estouradas">0</span>
-    bolhas
-    <div id="recorde">Recorde: <span id="recordeValor">0</span></div>
+    <span id="labelBolhas">bolhas</span>
+    <div id="recorde"><span id="labelRecorde">Recorde:</span> <span id="recordeValor">0</span></div>
   </div>
   <div id="fase">
-    <div class="titulo">FASE</div>
+    <div class="titulo" id="labelFase">FASE</div>
     <span class="numero" id="numeroFase">1</span>
     <div id="progresso"><div id="barra"></div></div>
   </div>
@@ -110,52 +290,41 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
     <p id="overlayTexto">Próxima fase em breve</p>
     <button id="overlayBotao">Continuar</button>
   </div>
-  <div id="instrucao">Junte 3 bolhas iguais!</div>
+  <div id="instrucao" class="instrucao-texto">Junte 3 bolhas iguais!</div>
 </div>
 
+<!-- ==================== TELA DE CONFIGURAÇÕES ==================== -->
 <div class="tela" id="telaConfig">
   <button class="botao-voltar" id="btnVoltar" title="Voltar">←</button>
-  <div class="config-titulo">⚙️ Configurações</div>
+  <div class="config-titulo">⚙️ <span id="configTitulo">Configurações</span></div>
+
   <div class="config-item">
-    <div class="rotulo"><span class="icone">🔊</span> Som</div>
+    <div class="rotulo"><span class="icone">🔊</span> <span id="labelSom">Som</span></div>
     <div class="opcoes" id="opcoesSom">
-      <button class="opcao" data-valor="on">Ligado</button>
-      <button class="opcao" data-valor="off">Desligado</button>
+      <button class="opcao" data-valor="on" id="opSomOn">Ligado</button>
+      <button class="opcao" data-valor="off" id="opSomOff">Desligado</button>
     </div>
   </div>
+
   <div class="config-item">
-    <div class="rotulo"><span class="icone">🗣️</span> Voz</div>
+    <div class="rotulo"><span class="icone">🗣️</span> <span id="labelVoz">Voz</span></div>
     <div class="opcoes" id="opcoesVoz">
-      <button class="opcao" data-valor="on">Ligada</button>
-      <button class="opcao" data-valor="off">Desligada</button>
+      <button class="opcao" data-valor="on" id="opVozOn">Ligada</button>
+      <button class="opcao" data-valor="off" id="opVozOff">Desligada</button>
     </div>
   </div>
+
   <div class="config-item">
-    <div class="rotulo"><span class="icone">🌍</span> Idioma</div>
-    <div class="opcoes" id="opcoesIdioma">
-      <button class="opcao" data-valor="pt">🇧🇷 PT</button>
-      <button class="opcao" data-valor="en">🇺🇸 EN</button>
-    </div>
-  </div>
-  <div class="config-item">
-    <div class="rotulo"><span class="icone">🎓</span> Ensinar</div>
-    <div class="opcoes" id="opcoesModoEdu">
-      <button class="opcao" data-valor="off">Nada</button>
-      <button class="opcao" data-valor="numeros">Números</button>
-      <button class="opcao" data-valor="cores">Cores</button>
-      <button class="opcao" data-valor="ambos">Ambos</button>
-    </div>
-  </div>
-  <div class="config-item">
-    <div class="rotulo"><span class="icone">🧘</span> Modo</div>
+    <div class="rotulo"><span class="icone">🧘</span> <span id="labelModo">Modo</span></div>
     <div class="opcoes" id="opcoesModo">
-      <button class="opcao" data-valor="normal">Normal</button>
-      <button class="opcao" data-valor="zen">Zen</button>
+      <button class="opcao" data-valor="normal" id="opModoNormal">Normal</button>
+      <button class="opcao" data-valor="zen" id="opModoZen">Zen</button>
     </div>
   </div>
 </div>
 
 <script>
+// ==================== ELEMENTOS ====================
 const telaInicial = document.getElementById('telaInicial');
 const telaJogo = document.getElementById('telaJogo');
 const telaConfig = document.getElementById('telaConfig');
@@ -178,6 +347,7 @@ const overlayTituloEl = document.getElementById('overlayTitulo');
 const overlayTextoEl = document.getElementById('overlayTexto');
 const overlayBotaoEl = document.getElementById('overlayBotao');
 
+// ==================== ESTADO ====================
 let telaAtual = 'inicial';
 let largura = 0, altura = 0;
 let bolhas = [];
@@ -197,6 +367,7 @@ let vozLigada = true;
 let idioma = 'pt';
 let modoEducativo = 'numeros';
 
+// ==================== TEXTOS ====================
 const textos = {
   numeros: {
     pt: { 1: 'um', 2: 'dois', 3: 'três', 4: 'quatro', 5: 'cinco' },
@@ -205,6 +376,61 @@ const textos = {
   cores: {
     pt: { 1: 'vermelho', 2: 'azul', 3: 'verde', 4: 'amarelo', 5: 'roxo' },
     en: { 1: 'red', 2: 'blue', 3: 'green', 4: 'yellow', 5: 'purple' }
+  }
+};
+
+const traducoes = {
+  pt: {
+    subtitulo: 'Aprender Brincando',
+    pergunta: 'O que aprender?',
+    numeros: 'Números',
+    cores: 'Cores',
+    ambos: 'Ambos',
+    iniciar: '▶ Iniciar',
+    bolhas: 'bolhas',
+    recorde: 'Recorde:',
+    fase: 'FASE',
+    instrucao: 'Junte 3 bolhas iguais!',
+    faseCompleta: 'FASE COMPLETA!',
+    proximaFase: 'Próxima:',
+    combos: 'combos',
+    continuar: 'Continuar',
+    configTitulo: 'Configurações',
+    som: 'Som',
+    ligado: 'Ligado',
+    desligado: 'Desligado',
+    voz: 'Voz',
+    ligada: 'Ligada',
+    desligada: 'Desligada',
+    modo: 'Modo',
+    normal: 'Normal',
+    zen: 'Zen'
+  },
+  en: {
+    subtitulo: 'Learn by Playing',
+    pergunta: 'What to learn?',
+    numeros: 'Numbers',
+    cores: 'Colors',
+    ambos: 'Both',
+    iniciar: '▶ Start',
+    bolhas: 'bubbles',
+    recorde: 'Best:',
+    fase: 'LEVEL',
+    instrucao: 'Match 3 equal bubbles!',
+    faseCompleta: 'LEVEL COMPLETE!',
+    proximaFase: 'Next:',
+    combos: 'combos',
+    continuar: 'Continue',
+    configTitulo: 'Settings',
+    som: 'Sound',
+    ligado: 'On',
+    desligado: 'Off',
+    voz: 'Voice',
+    ligada: 'On',
+    desligada: 'Off',
+    modo: 'Mode',
+    normal: 'Normal',
+    zen: 'Zen'
   }
 };
 
@@ -219,6 +445,79 @@ const tipos = [
 let recorde = parseInt(localStorage.getItem('recordeBolhas') || '0');
 recordeEl.textContent = recorde;
 
+// ==================== TRADUÇÃO ====================
+function aplicarTraducoes() {
+  const t = traducoes[idioma];
+
+  document.getElementById('subtitulo').textContent = t.subtitulo;
+  document.getElementById('perguntaAprender').textContent = t.pergunta;
+  document.getElementById('labelNumeros').textContent = t.numeros;
+  document.getElementById('labelCores').textContent = t.cores;
+  document.getElementById('labelAmbos').textContent = t.ambos;
+  document.getElementById('labelIniciar').textContent = t.iniciar;
+  document.getElementById('labelBolhas').textContent = t.bolhas;
+  document.getElementById('labelRecorde').textContent = t.recorde;
+  document.getElementById('labelFase').textContent = t.fase;
+  document.getElementById('labelSom').textContent = t.som;
+  document.getElementById('opSomOn').textContent = t.ligado;
+  document.getElementById('opSomOff').textContent = t.desligado;
+  document.getElementById('labelVoz').textContent = t.voz;
+  document.getElementById('opVozOn').textContent = t.ligada;
+  document.getElementById('opVozOff').textContent = t.desligada;
+  document.getElementById('labelModo').textContent = t.modo;
+  document.getElementById('opModoNormal').textContent = t.normal;
+  document.getElementById('opModoZen').textContent = t.zen;
+  document.getElementById('configTitulo').textContent = t.configTitulo;
+  document.getElementById('overlayTitulo').textContent = t.faseCompleta;
+  document.getElementById('overlayBotao').textContent = t.continuar;
+  document.getElementById('instrucao').textContent = t.instrucao;
+  document.getElementById('labelModo').textContent = t.modo;
+}
+
+// ==================== SELEÇÃO DE IDIOMA E APRENDIZADO ====================
+function atualizarBotoesIdioma() {
+  document.querySelectorAll('.botao-idioma').forEach(b => {
+    b.classList.toggle('ativo', b.dataset.idioma === idioma);
+  });
+}
+
+function atualizarBotoesAprender() {
+  document.querySelectorAll('.botao-aprender').forEach(b => {
+    b.classList.toggle('ativo', b.dataset.modo === modoEducativo);
+  });
+}
+
+document.querySelectorAll('.botao-idioma').forEach(b => {
+  b.addEventListener('click', () => {
+    idioma = b.dataset.idioma;
+    localStorage.setItem('idioma', idioma);
+    atualizarBotoesIdioma();
+    aplicarTraducoes();
+    initAudio();
+    if (vozLigada) {
+      const confirmacao = idioma === 'pt' ? 'Português' : 'English';
+      setTimeout(() => falar(confirmacao), 100);
+    }
+  });
+});
+
+document.querySelectorAll('.botao-aprender').forEach(b => {
+  b.addEventListener('click', () => {
+    modoEducativo = b.dataset.modo;
+    localStorage.setItem('modoEducativo', modoEducativo);
+    atualizarBotoesAprender();
+    initAudio();
+    if (vozLigada) {
+      const falas = {
+        pt: { numeros: 'Números', cores: 'Cores', ambos: 'Números e cores' },
+        en: { numeros: 'Numbers', cores: 'Colors', ambos: 'Numbers and colors' }
+      };
+      setTimeout(() => falar(falas[idioma][modoEducativo]), 100);
+    }
+  });
+});
+
+// ==================== BOLHAS DECORATIVAS ====================
 function criarBolhasDecorativas() {
   const container = document.getElementById('bolhasFundo');
   container.innerHTML = '';
@@ -239,6 +538,7 @@ function criarBolhasDecorativas() {
 }
 criarBolhasDecorativas();
 
+// ==================== NAVEGAÇÃO ====================
 function irParaTela(nomeTela) {
   telaAtual = nomeTela;
   telaInicial.classList.remove('ativa');
@@ -279,6 +579,7 @@ btnConfig.addEventListener('click', () => irParaTela('config'));
 btnHome.addEventListener('click', () => irParaTela('inicial'));
 btnVoltar.addEventListener('click', () => irParaTela('inicial'));
 
+// ==================== ÁUDIO ====================
 function initAudio() {
   if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
   if (audioContext.state === 'suspended') audioContext.resume();
@@ -317,6 +618,7 @@ function tocarCombo() {
   });
 }
 
+// ==================== VOZ ====================
 function falar(texto) {
   if (!vozLigada) return;
   if (!('speechSynthesis' in window)) return;
@@ -340,11 +642,10 @@ function falarCombo(numero) {
   if (texto) setTimeout(() => falar(texto), 250);
 }
 
+// ==================== CONFIG ====================
 function atualizarBotoesConfig() {
   document.querySelectorAll('#opcoesSom .opcao').forEach(b => b.classList.toggle('ativa', b.dataset.valor === (somLigado ? 'on' : 'off')));
   document.querySelectorAll('#opcoesVoz .opcao').forEach(b => b.classList.toggle('ativa', b.dataset.valor === (vozLigada ? 'on' : 'off')));
-  document.querySelectorAll('#opcoesIdioma .opcao').forEach(b => b.classList.toggle('ativa', b.dataset.valor === idioma));
-  document.querySelectorAll('#opcoesModoEdu .opcao').forEach(b => b.classList.toggle('ativa', b.dataset.valor === modoEducativo));
   document.querySelectorAll('#opcoesModo .opcao').forEach(b => b.classList.toggle('ativa', b.dataset.valor === (modoZen ? 'zen' : 'normal')));
 }
 
@@ -362,29 +663,13 @@ document.getElementById('opcoesVoz').addEventListener('click', (e) => {
   if (vozLigada) setTimeout(() => falar(idioma === 'pt' ? 'Voz ligada' : 'Voice on'), 100);
 });
 
-document.getElementById('opcoesIdioma').addEventListener('click', (e) => {
-  if (!e.target.classList.contains('opcao')) return;
-  idioma = e.target.dataset.valor;
-  atualizarBotoesConfig();
-  if (vozLigada) setTimeout(() => falar(idioma === 'pt' ? 'Português' : 'English'), 100);
-});
-
-document.getElementById('opcoesModoEdu').addEventListener('click', (e) => {
-  if (!e.target.classList.contains('opcao')) return;
-  modoEducativo = e.target.dataset.valor;
-  atualizarBotoesConfig();
-  if (vozLigada && modoEducativo !== 'off') {
-    const ex = { 'numeros': idioma === 'pt' ? 'dois' : 'two', 'cores': idioma === 'pt' ? 'azul' : 'blue', 'ambos': idioma === 'pt' ? 'dois, azul' : 'two, blue' };
-    setTimeout(() => falar(ex[modoEducativo]), 100);
-  }
-});
-
 document.getElementById('opcoesModo').addEventListener('click', (e) => {
   if (!e.target.classList.contains('opcao')) return;
   modoZen = e.target.dataset.valor === 'zen';
   atualizarBotoesConfig();
 });
 
+// ==================== JOGO ====================
 function redimensionar() {
   if (!canvas) return;
   largura = canvas.width = window.innerWidth;
@@ -529,8 +814,9 @@ function atualizarContador() {
 
 function passarDeFase() {
   jogoPausado = true;
-  overlayTituloEl.textContent = 'FASE ' + fase + ' COMPLETA!';
-  overlayTextoEl.textContent = 'Próxima: ' + (combosNecessarios + 2) + ' combos';
+  const t = traducoes[idioma];
+  overlayTituloEl.textContent = t.faseCompleta;
+  overlayTextoEl.textContent = t.proximaFase + ' ' + (combosNecessarios + 2) + ' ' + t.combos;
   overlayEl.classList.add('mostrar');
 }
 
@@ -619,6 +905,26 @@ canvas.addEventListener('pointerdown', (e) => {
 });
 
 overlayBotaoEl.addEventListener('click', proximaFase);
+
+// ==================== INICIALIZAÇÃO ====================
+// Carrega preferências salvas
+const idiomaSalvo = localStorage.getItem('idioma');
+if (idiomaSalvo) idioma = idiomaSalvo;
+
+const modoSalvo = localStorage.getItem('modoEducativo');
+if (modoSalvo) modoEducativo = modoSalvo;
+
+const somSalvo = localStorage.getItem('somLigado');
+if (somSalvo === 'false') somLigado = false;
+
+const vozSalva = localStorage.getItem('vozLigada');
+if (vozSalva === 'false') vozLigada = false;
+
+// Aplica estado inicial
+atualizarBotoesIdioma();
+atualizarBotoesAprender();
+aplicarTraducoes();
+atualizarBotoesConfig();
 </script>
 
 </body>

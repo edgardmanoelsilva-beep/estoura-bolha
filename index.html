@@ -303,7 +303,6 @@ const traducoes = {
     desligada: 'Desligada',
     vozLigada: 'Voz ligada',
     portugues: 'Português',
-    muitoBem: 'Muito bem!',
     tenteDeNovo: 'Tente de novo',
     encontre: 'Encontre',
     aCor: 'a cor',
@@ -338,7 +337,6 @@ const traducoes = {
     desligada: 'Off',
     vozLigada: 'Voice on',
     portugues: 'English',
-    muitoBem: 'Well done!',
     tenteDeNovo: 'Try again',
     encontre: 'Find',
     aCor: 'the color',
@@ -567,7 +565,6 @@ function falar(texto) {
 
 function falarMissao() {
   if (!missaoAtual) return;
-  const t = traducoes[idioma];
   let texto = '';
   if (missaoAtual.tipo === 'cor') texto = textos.cores[idioma][missaoAtual.valor];
   else if (missaoAtual.tipo === 'numero') texto = textos.numeros[idioma][missaoAtual.valor];
@@ -576,8 +573,8 @@ function falarMissao() {
 }
 
 function falarAcerto() {
-  if (!vozLigada) return;
-  setTimeout(() => falar(traducoes[idioma].muitoBem), 200);
+  // Voz de acerto removida — só som de estouro
+  return;
 }
 
 function falarErro() {
@@ -800,10 +797,6 @@ function calcularEstrelas() {
   return 1;
 }
 
-function tocarFanfarraCompleta() {
-  tocarFanfarra();
-}
-
 let festaParticulas = [];
 function iniciarFesta() {
   festaParticulas = [];
@@ -867,7 +860,7 @@ function passarDeFase() {
   if (estrelas >= 3) setTimeout(() => document.getElementById('estrela3').classList.add('ativa'), 1100);
 
   iniciarFesta();
-  tocarFanfarraCompleta();
+  tocarFanfarra();
   falarFaseCompleta(estrelas);
 
   telaFaseCompleta.classList.add('ativa');
@@ -897,15 +890,13 @@ function clicar(x, y) {
     const b = bolhas[i];
     if (Math.hypot(x - b.x, y - b.y) < b.raio) {
       if (verificarMissao(b)) {
-        // ACERTOU
         tocarPop(b.som);
         criarParticulas(b.x, b.y, b.cor, 25);
         estouradas++;
         acertosNaFase++;
         atualizarContador();
         atualizarBarraProgresso();
-        falarAcerto();
-        mostrarCombo(traducoes[idioma].muitoBem, b.cor);
+        mostrarCombo('✓', b.cor);
 
         bolhas.splice(i, 1);
 
@@ -920,7 +911,6 @@ function clicar(x, y) {
           }, 500);
         }
       } else {
-        // ERROU
         b.tremendo = 20;
         tocarErro();
         falarErro();

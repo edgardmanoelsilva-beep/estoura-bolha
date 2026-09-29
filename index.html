@@ -51,11 +51,11 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
 .botao-jogo:active { transform: scale(0.9); background: rgba(255,255,255,0.3); }
 
 #ui { position: fixed; top: 15px; left: 15px; color: rgba(255,255,255,0.6); font-size: 14px; pointer-events: none; font-weight: 300; letter-spacing: 1px; }
-#estouradas { font-size: 38px; font-weight: 200; color: rgba(255,255,255,0.9); display: block; margin-bottom: 3px; transition: transform 0.2s ease; }
-#estouradas.pulso { transform: scale(1.15); }
+#estouradas { font-size: 42px; font-weight: 700; color: rgba(255,255,255,0.9); display: block; margin-bottom: 3px; transition: transform 0.2s ease, color 0.3s; }
+#estouradas.pulso { transform: scale(1.25); color: #ffdc3c; }
 #recorde { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 3px; }
 
-#fase { position: fixed; top: 90px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.9); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; pointer-events: none; text-align: center; font-weight: 300; z-index: 5; }
+#fase { position: fixed; top: 100px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.9); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; pointer-events: none; text-align: center; font-weight: 300; z-index: 5; }
 #fase .titulo { font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 3px; }
 #fase .numero { font-size: 22px; font-weight: 600; display: block; margin: 2px 0; color: #ffdc3c; }
 
@@ -71,6 +71,9 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
 
 #combo { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0); color: rgba(255,255,255,0.95); font-size: 50px; font-weight: 900; pointer-events: none; transition: transform 0.4s, opacity 0.6s; opacity: 0; text-shadow: 0 0 40px rgba(255,220,60,0.8); text-align: center; z-index: 8; padding: 0 20px; }
 #combo.mostrar { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+
+#flash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; opacity: 0; pointer-events: none; z-index: 15; transition: opacity 0.4s; }
+#flash.ativo { opacity: 0.15; transition: opacity 0.05s; }
 
 #telaFaseCompleta { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; flex-direction: column; color: white; z-index: 30; text-align: center; padding: 20px; }
 #telaFaseCompleta.ativa { display: flex; }
@@ -113,7 +116,7 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
   .opcao { flex: 1; padding: 10px 6px; font-size: 13px; }
   .config-titulo { font-size: 24px; }
   #fase .numero { font-size: 20px; }
-  #estouradas { font-size: 30px; }
+  #estouradas { font-size: 32px; }
   #missaoTopo .missaoTexto { font-size: 18px; }
   #missaoTopo { padding: 8px 18px; top: 15px; }
   #fase { top: 110px; }
@@ -133,7 +136,6 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
   <div class="conteudo">
     <div class="logo-titulo">Bolha Kids</div>
     <div class="logo-sub" id="subtitulo">Aprender Brincando</div>
-
     <div class="pergunta" id="perguntaAprender">O que aprender?</div>
     <div class="opcoes-grupo">
       <button class="botao-opcao ativo" data-aprender="numeros">
@@ -149,7 +151,6 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
         <span id="labelAmbos">Ambos</span>
       </button>
     </div>
-
     <button class="botao-iniciar" id="btnIniciar">
       <span id="labelIniciar">▶ Iniciar</span>
     </button>
@@ -164,7 +165,7 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
   </div>
   <div id="ui">
     <span id="estouradas">0</span>
-    <span id="labelBolhas">acertos</span>
+    <span id="labelBolhas">missões</span>
     <div id="recorde"><span id="labelRecorde">Recorde:</span> <span id="recordeValor">0</span></div>
   </div>
   <div id="missaoTopo">
@@ -178,7 +179,8 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
     <div style="font-size:10px; margin-top:4px; color: rgba(255,255,255,0.6);"><span id="acertosFase">0</span>/<span id="acertosNecessarios">10</span></div>
   </div>
   <div id="combo"></div>
-  <div id="instrucao">Toque na bolha certa!</div>
+  <div id="flash"></div>
+  <div id="instrucao">Junte 3 bolhas da missão!</div>
 </div>
 
 <div id="telaFaseCompleta">
@@ -226,6 +228,7 @@ const btnVoltar = document.getElementById('btnVoltar');
 const botaoContinuar = document.getElementById('botaoContinuar');
 const particulasFesta = document.getElementById('particulasFesta');
 const ctxFesta = particulasFesta.getContext('2d');
+const flashEl = document.getElementById('flash');
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -260,6 +263,14 @@ let idioma = 'pt';
 let modoEducativo = 'numeros';
 let missaoAtual = null;
 
+const formasPorCor = {
+  vermelho: 'circulo',
+  azul: 'quadrado',
+  verde: 'triangulo',
+  amarelo: 'estrela',
+  preto: 'losango'
+};
+
 const textos = {
   numeros: {
     pt: { 1: 'um', 2: 'dois', 3: 'três', 4: 'quatro', 5: 'cinco' },
@@ -283,68 +294,36 @@ const traducoes = {
   pt: {
     subtitulo: 'Aprender Brincando',
     perguntaAprender: 'O que aprender?',
-    numeros: 'Números',
-    cores: 'Cores',
-    ambos: 'Ambos',
-    iniciar: '▶ Iniciar',
-    acertos: 'acertos',
-    recorde: 'Recorde:',
-    fase: 'FASE',
-    instrucao: 'Toque na bolha certa!',
-    missaoLabel: 'MISSÃO',
-    faseCompleta: 'FASE COMPLETA!',
-    continuar: 'Continuar',
-    configTitulo: 'Configurações',
-    som: 'Som',
-    ligado: 'Ligado',
-    desligado: 'Desligado',
-    voz: 'Voz',
-    ligada: 'Ligada',
-    desligada: 'Desligada',
-    vozLigada: 'Voz ligada',
-    portugues: 'Português',
-    encontre: 'Encontre',
-    aCor: 'a cor',
-    oNumero: 'o número',
-    acertou: 'Você acertou',
-    vezes: 'vezes!',
-    estrela1: 'estrela',
-    estrelas: 'estrelas',
-    ganhou: 'Você ganhou',
-    parabens: 'Parabéns!'
+    numeros: 'Números', cores: 'Cores', ambos: 'Ambos',
+    iniciar: '▶ Iniciar', acertos: 'missões', recorde: 'Recorde:',
+    fase: 'FASE', instrucao: 'Junte 3 bolhas da missão!',
+    missaoLabel: 'MISSÃO', faseCompleta: 'FASE COMPLETA!',
+    continuar: 'Continuar', configTitulo: 'Configurações',
+    som: 'Som', ligado: 'Ligado', desligado: 'Desligado',
+    voz: 'Voz', ligada: 'Ligada', desligada: 'Desligada',
+    vozLigada: 'Voz ligada', portugues: 'Português',
+    encontre: 'Encontre', aCor: 'a cor', oNumero: 'o número',
+    acertou: 'Você completou', vezes: 'missões!',
+    estrela1: 'estrela', estrelas: 'estrelas',
+    ganhou: 'Você ganhou', parabens: 'Parabéns!',
+    junte3: 'Junte 3 da mesma missão!'
   },
   en: {
     subtitulo: 'Learn by Playing',
     perguntaAprender: 'What to learn?',
-    numeros: 'Numbers',
-    cores: 'Colors',
-    ambos: 'Both',
-    iniciar: '▶ Start',
-    acertos: 'hits',
-    recorde: 'Best:',
-    fase: 'LEVEL',
-    instrucao: 'Tap the correct bubble!',
-    missaoLabel: 'MISSION',
-    faseCompleta: 'LEVEL COMPLETE!',
-    continuar: 'Continue',
-    configTitulo: 'Settings',
-    som: 'Sound',
-    ligado: 'On',
-    desligado: 'Off',
-    voz: 'Voice',
-    ligada: 'On',
-    desligada: 'Off',
-    vozLigada: 'Voice on',
-    portugues: 'English',
-    encontre: 'Find',
-    aCor: 'the color',
-    oNumero: 'the number',
-    acertou: 'You got',
-    vezes: 'right!',
-    estrela1: 'star',
-    estrelas: 'stars',
-    ganhou: 'You earned',
-    parabens: 'Congratulations!'
+    numeros: 'Numbers', cores: 'Colors', ambos: 'Both',
+    iniciar: '▶ Start', acertos: 'missions', recorde: 'Best:',
+    fase: 'LEVEL', instrucao: 'Match 3 of the mission!',
+    missaoLabel: 'MISSION', faseCompleta: 'LEVEL COMPLETE!',
+    continuar: 'Continue', configTitulo: 'Settings',
+    som: 'Sound', ligado: 'On', desligado: 'Off',
+    voz: 'Voice', ligada: 'On', desligada: 'Off',
+    vozLigada: 'Voice on', portugues: 'English',
+    encontre: 'Find', aCor: 'the color', oNumero: 'the number',
+    acertou: 'You completed', vezes: 'missions!',
+    estrela1: 'star', estrelas: 'stars',
+    ganhou: 'You earned', parabens: 'Congratulations!',
+    junte3: 'Match 3 of the mission!'
   }
 };
 
@@ -464,12 +443,6 @@ function getNumerosDisponiveis() {
   return [1, 2, 3, 4, 5];
 }
 
-function getNumBolhas() {
-  if (fase <= 2) return 6;
-  if (fase <= 4) return 7;
-  return 8;
-}
-
 function reiniciarJogo() {
   fase = 1;
   acertosNaFase = 0;
@@ -518,6 +491,38 @@ function tocarPop(frequenciaBase = 600) {
   osc.start(agora); osc.stop(agora + 0.15);
 }
 
+function tocarSelecao(freq) {
+  if (!somLigado || !audioContext) return;
+  const agora = audioContext.currentTime;
+  const osc = audioContext.createOscillator();
+  const ganho = audioContext.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(freq * 1.5, agora);
+  ganho.gain.setValueAtTime(0.0001, agora);
+  ganho.gain.exponentialRampToValueAtTime(0.1, agora + 0.01);
+  ganho.gain.exponentialRampToValueAtTime(0.0001, agora + 0.1);
+  osc.connect(ganho); ganho.connect(audioContext.destination);
+  osc.start(agora); osc.stop(agora + 0.1);
+}
+
+function tocarTriunfo() {
+  if (!somLigado || !audioContext) return;
+  const agora = audioContext.currentTime;
+  const notas = [523, 659, 784];
+  notas.forEach((freq, i) => {
+    const osc = audioContext.createOscillator();
+    const ganho = audioContext.createGain();
+    const inicio = agora + i * 0.08;
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(freq, inicio);
+    ganho.gain.setValueAtTime(0.0001, inicio);
+    ganho.gain.exponentialRampToValueAtTime(0.18, inicio + 0.02);
+    ganho.gain.exponentialRampToValueAtTime(0.0001, inicio + 0.3);
+    osc.connect(ganho); ganho.connect(audioContext.destination);
+    osc.start(inicio); osc.stop(inicio + 0.3);
+  });
+}
+
 function tocarErro() {
   if (!somLigado || !audioContext) return;
   const agora = audioContext.currentTime;
@@ -536,18 +541,18 @@ function tocarErro() {
 function tocarFanfarra() {
   if (!somLigado || !audioContext) return;
   const agora = audioContext.currentTime;
-  const notas = [523, 659, 784, 1047];
+  const notas = [523, 659, 784, 1047, 1319];
   notas.forEach((freq, i) => {
     const osc = audioContext.createOscillator();
     const ganho = audioContext.createGain();
-    const inicio = agora + i * 0.15;
+    const inicio = agora + i * 0.12;
     osc.type = 'triangle';
     osc.frequency.setValueAtTime(freq, inicio);
     ganho.gain.setValueAtTime(0.0001, inicio);
     ganho.gain.exponentialRampToValueAtTime(0.2, inicio + 0.02);
-    ganho.gain.exponentialRampToValueAtTime(0.0001, inicio + 0.4);
+    ganho.gain.exponentialRampToValueAtTime(0.0001, inicio + 0.45);
     osc.connect(ganho); ganho.connect(audioContext.destination);
-    osc.start(inicio); osc.stop(inicio + 0.4);
+    osc.start(inicio); osc.stop(inicio + 0.45);
   });
 }
 
@@ -568,16 +573,6 @@ function falarMissao() {
   else if (missaoAtual.tipo === 'numero') texto = textos.numeros[idioma][missaoAtual.valor];
   else if (missaoAtual.tipo === 'ambos') texto = textos.numeros[idioma][missaoAtual.numero] + ', ' + textos.cores[idioma][missaoAtual.cor];
   setTimeout(() => falar(texto), 200);
-}
-
-function falarAcerto() {
-  // Voz de acerto removida — só som de estouro
-  return;
-}
-
-function falarErro() {
-  // Voz de erro removida — só tremida + som
-  return;
 }
 
 function falarFaseCompleta(estrelas) {
@@ -616,23 +611,65 @@ function redimensionar() {
 window.addEventListener('resize', redimensionar);
 redimensionar();
 
+function desenharForma(forma, x, y, tamanho) {
+  ctx.save();
+  ctx.strokeStyle = 'rgba(255,255,255,0.95)';
+  ctx.lineWidth = 3;
+  ctx.fillStyle = 'rgba(255,255,255,0.25)';
+  ctx.beginPath();
+  const r = tamanho * 0.45;
+  if (forma === 'circulo') {
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+  } else if (forma === 'quadrado') {
+    ctx.rect(x - r, y - r, r * 2, r * 2);
+  } else if (forma === 'triangulo') {
+    ctx.moveTo(x, y - r);
+    ctx.lineTo(x + r, y + r);
+    ctx.lineTo(x - r, y + r);
+    ctx.closePath();
+  } else if (forma === 'estrela') {
+    for (let i = 0; i < 5; i++) {
+      const ang = (Math.PI * 2 * i) / 5 - Math.PI / 2;
+      const x1 = x + Math.cos(ang) * r;
+      const y1 = y + Math.sin(ang) * r;
+      const ang2 = ang + Math.PI / 5;
+      const x2 = x + Math.cos(ang2) * r * 0.5;
+      const y2 = y + Math.sin(ang2) * r * 0.5;
+      if (i === 0) ctx.moveTo(x1, y1);
+      else ctx.lineTo(x1, y1);
+      ctx.lineTo(x2, y2);
+    }
+    ctx.closePath();
+  } else if (forma === 'losango') {
+    ctx.moveTo(x, y - r);
+    ctx.lineTo(x + r * 0.7, y);
+    ctx.lineTo(x, y + r);
+    ctx.lineTo(x - r * 0.7, y);
+    ctx.closePath();
+  }
+  ctx.fill();
+  ctx.stroke();
+  ctx.restore();
+}
+
 function criarBolhaMissao(coresDisp, numerosDisp) {
   const raio = 42 + Math.random() * 18;
   const corSorteada = coresDisp[Math.floor(Math.random() * coresDisp.length)];
   const numeroSorteado = numerosDisp[Math.floor(Math.random() * numerosDisp.length)];
-  const margemX = raio + 20;
-  const margemYTopo = 130;
-  const margemYBaixo = 80;
   return {
     id: Math.random().toString(36).substring(2, 9),
-    x: margemX + Math.random() * (largura - margemX * 2),
-    y: margemYTopo + Math.random() * (altura - margemYTopo - margemYBaixo),
+    x: raio + 20 + Math.random() * (largura - (raio + 20) * 2),
+    y: altura + raio,
     raio: raio,
     cor: corSorteada.cor,
     corNome: corSorteada.nome,
     som: corSorteada.som,
     temBorda: corSorteada.borda || false,
     numero: numeroSorteado,
+    forma: formasPorCor[corSorteada.nome] || 'circulo',
+    velocidade: 0.5 + Math.random() * 0.4,
+    oscilacao: Math.random() * Math.PI * 2,
+    oscilacaoVelocidade: 0.01 + Math.random() * 0.02,
     selecionada: false,
     escala: 1.0,
     tremendo: 0,
@@ -648,11 +685,33 @@ function criarParticulas(x, y, cor, qtd = 20) {
   }
 }
 
+function criarEstrelinhas(x, y) {
+  for (let i = 0; i < 6; i++) {
+    const ang = -Math.PI / 2 + (Math.random() - 0.5) * 1.2;
+    const vel = 2 + Math.random() * 3;
+    particulas.push({
+      x: x, y: y,
+      vx: Math.cos(ang) * vel,
+      vy: Math.sin(ang) * vel - 1,
+      raio: 4 + Math.random() * 4,
+      cor: 'rgba(255,220,60,0.95)',
+      vida: 1.0,
+      decaimento: 0.015,
+      estrela: true
+    });
+  }
+}
+
 function mostrarCombo(texto, cor) {
   comboEl.textContent = texto;
   comboEl.style.color = cor || 'rgba(255,255,255,0.95)';
   comboEl.classList.add('mostrar');
   setTimeout(() => comboEl.classList.remove('mostrar'), 900);
+}
+
+function ativarFlash() {
+  flashEl.classList.add('ativo');
+  setTimeout(() => flashEl.classList.remove('ativo'), 80);
 }
 
 function atualizarBarraProgresso() {
@@ -673,13 +732,25 @@ function desenhar() {
       if (b.tremendo > 0) b.tremendo -= 1;
       if (b.nascer < 1) b.nascer += 0.08;
 
-      const escalaAlvo = b.selecionada ? 1.15 : 1.0;
+      b.y -= b.velocidade;
+      b.oscilacao += b.oscilacaoVelocidade;
+      b.x += Math.sin(b.oscilacao) * 0.5;
+
+      const escalaAlvo = b.selecionada ? 1.18 : 1.0;
       b.escala += (escalaAlvo - b.escala) * 0.15;
 
       let offsetX = 0;
       if (b.tremendo > 0) offsetX = Math.sin(b.tremendo * 1.5) * 8;
 
       const escalaFinal = b.raio * b.escala * b.nascer;
+
+      if (b.selecionada) {
+        ctx.beginPath();
+        ctx.arc(b.x + offsetX, b.y, escalaFinal + 10, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(255,255,255,0.95)';
+        ctx.lineWidth = 4;
+        ctx.stroke();
+      }
 
       const grad = ctx.createRadialGradient(b.x + offsetX - b.raio * 0.3, b.y - b.raio * 0.3, b.raio * 0.1, b.x + offsetX, b.y, escalaFinal);
       grad.addColorStop(0, 'rgba(255,255,255,0.7)');
@@ -704,15 +775,43 @@ function desenhar() {
       ctx.fillStyle = 'rgba(255,255,255,0.6)';
       ctx.fill();
 
-      ctx.save();
-      ctx.font = `bold ${escalaFinal * 0.9}px 'Segoe UI', sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillStyle = 'rgba(0,0,0,0.4)';
-      ctx.fillText(b.numero, b.x + offsetX + 2, b.y + 2);
-      ctx.fillStyle = 'rgba(255,255,255,0.95)';
-      ctx.fillText(b.numero, b.x + offsetX, b.y);
-      ctx.restore();
+      // Conteúdo depende do modo educativo
+      if (modoEducativo === 'cores') {
+        desenharForma(b.forma, b.x + offsetX, b.y, escalaFinal);
+      } else if (modoEducativo === 'numeros') {
+        ctx.save();
+        ctx.font = `bold ${escalaFinal * 0.9}px 'Segoe UI', sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = 'rgba(0,0,0,0.4)';
+        ctx.fillText(b.numero, b.x + offsetX + 2, b.y + 2);
+        ctx.fillStyle = 'rgba(255,255,255,0.95)';
+        ctx.fillText(b.numero, b.x + offsetX, b.y);
+        ctx.restore();
+      } else {
+        // Ambos
+        ctx.save();
+        ctx.font = `bold ${escalaFinal * 0.9}px 'Segoe UI', sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = 'rgba(0,0,0,0.4)';
+        ctx.fillText(b.numero, b.x + offsetX + 2, b.y + 2);
+        ctx.fillStyle = 'rgba(255,255,255,0.95)';
+        ctx.fillText(b.numero, b.x + offsetX, b.y);
+        ctx.restore();
+      }
+
+      if (b.y + b.raio < 0) {
+        const idx = bolhasSelecionadas.indexOf(b);
+        if (idx > -1) bolhasSelecionadas.splice(idx, 1);
+        bolhas.splice(i, 1);
+        // Repor bolha
+        setTimeout(() => {
+          if (telaAtual === 'jogo' && !jogoPausado) {
+            bolhas.push(criarBolhaMissao(getCoresDisponiveis(), getNumerosDisponiveis()));
+          }
+        }, 300);
+      }
     }
   }
 
@@ -720,10 +819,21 @@ function desenhar() {
     const p = particulas[i];
     p.x += p.vx; p.y += p.vy; p.vy += 0.15; p.vida -= p.decaimento;
     if (p.vida <= 0) { particulas.splice(i, 1); continue; }
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.raio * p.vida, 0, Math.PI * 2);
-    ctx.fillStyle = p.cor.replace(/0\.9|0\.95/, p.vida.toFixed(2));
-    ctx.fill();
+    if (p.estrela) {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.font = `${p.raio * 2}px serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.globalAlpha = p.vida;
+      ctx.fillText('⭐', 0, 0);
+      ctx.restore();
+    } else {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.raio * p.vida, 0, Math.PI * 2);
+      ctx.fillStyle = p.cor.replace(/0\.9|0\.95/, p.vida.toFixed(2));
+      ctx.fill();
+    }
   }
 
   requestAnimationFrame(desenhar);
@@ -734,9 +844,10 @@ function gerarBolhasMissao() {
   bolhas = [];
   const coresDisp = getCoresDisponiveis();
   const numerosDisp = getNumerosDisponiveis();
-  const qtd = getNumBolhas();
-  for (let i = 0; i < qtd; i++) {
-    bolhas.push(criarBolhaMissao(coresDisp, numerosDisp));
+  for (let i = 0; i < 8; i++) {
+    const b = criarBolhaMissao(coresDisp, numerosDisp);
+    b.y = altura * 0.2 + Math.random() * altura * 0.7;
+    bolhas.push(b);
   }
 }
 
@@ -760,14 +871,45 @@ function gerarMissao() {
     }
     tentativas++;
     if (tentativas > 50) break;
-  } while (!existeBolhaParaMissao());
+  } while (!temBolhaParaMissao());
+
+  // Garante pelo menos 3 bolhas da missão na tela
+  let qtdMissao = bolhas.filter(b => verificarMissao(b)).length;
+  let seguranca = 0;
+  while (qtdMissao < 3 && seguranca < 20) {
+    const idx = Math.floor(Math.random() * bolhas.length);
+    const novaBolha = criarBolhaMissao(coresDisp, numerosDisp);
+    novaBolha.x = bolhas[idx].x;
+    novaBolha.y = bolhas[idx].y;
+    if (missaoAtual.tipo === 'cor') {
+      const cor = coresDisp.find(c => c.nome === missaoAtual.valor);
+      novaBolha.cor = cor.cor;
+      novaBolha.corNome = cor.nome;
+      novaBolha.som = cor.som;
+      novaBolha.temBorda = cor.borda || false;
+      novaBolha.forma = formasPorCor[cor.nome] || 'circulo';
+    } else if (missaoAtual.tipo === 'numero') {
+      novaBolha.numero = missaoAtual.valor;
+    } else {
+      const cor = coresDisp.find(c => c.nome === missaoAtual.cor);
+      novaBolha.cor = cor.cor;
+      novaBolha.corNome = cor.nome;
+      novaBolha.som = cor.som;
+      novaBolha.temBorda = cor.borda || false;
+      novaBolha.forma = formasPorCor[cor.nome] || 'circulo';
+      novaBolha.numero = missaoAtual.numero;
+    }
+    bolhas.splice(idx, 1, novaBolha);
+    qtdMissao = bolhas.filter(b => verificarMissao(b)).length;
+    seguranca++;
+  }
 
   atualizarMissaoTopo();
   falarMissao();
 }
 
-function existeBolhaParaMissao() {
-  return bolhas.some(b => verificarMissao(b));
+function temBolhaParaMissao() {
+  return bolhas.filter(b => verificarMissao(b)).length >= 3;
 }
 
 function verificarMissao(b) {
@@ -781,7 +923,7 @@ function verificarMissao(b) {
 function atualizarContador() {
   estouradasEl.textContent = estouradas;
   estouradasEl.classList.add('pulso');
-  setTimeout(() => estouradasEl.classList.remove('pulso'), 200);
+  setTimeout(() => estouradasEl.classList.remove('pulso'), 400);
   if (estouradas > recorde) {
     recorde = estouradas;
     localStorage.setItem('recordeBolhas', recorde);
@@ -790,8 +932,8 @@ function atualizarContador() {
 }
 
 function calcularEstrelas() {
-  if (errosNaFase <= 1) return 3;
-  if (errosNaFase <= 3) return 2;
+  if (errosNaFase <= 2) return 3;
+  if (errosNaFase <= 5) return 2;
   return 1;
 }
 
@@ -799,7 +941,7 @@ let festaParticulas = [];
 function iniciarFesta() {
   festaParticulas = [];
   const coresFesta = ['#ffdc3c','#ff465a','#3c82ff','#46dc78','#b464ff','#ff9a3c'];
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 130; i++) {
     festaParticulas.push({
       x: Math.random() * window.innerWidth,
       y: -20 - Math.random() * 100,
@@ -874,11 +1016,17 @@ function proximaFase() {
   atualizarBarraProgresso();
   jogoPausado = false;
   faseCompleta = false;
+  bolhasSelecionadas = [];
   gerarBolhasMissao();
   gerarMissao();
 }
 
 botaoContinuar.addEventListener('click', proximaFase);
+
+function limparSelecionadas() {
+  bolhasSelecionadas.forEach(b => b.selecionada = false);
+  bolhasSelecionadas = [];
+}
 
 function clicar(x, y) {
   if (jogoPausado || faseCompleta) return;
@@ -888,30 +1036,59 @@ function clicar(x, y) {
     const b = bolhas[i];
     if (Math.hypot(x - b.x, y - b.y) < b.raio) {
       if (verificarMissao(b)) {
-        tocarPop(b.som);
-        criarParticulas(b.x, b.y, b.cor, 25);
-        estouradas++;
-        acertosNaFase++;
-        atualizarContador();
-        atualizarBarraProgresso();
-        mostrarCombo('✓', b.cor);
+        // Acertou uma bolha da missão
+        if (b.selecionada) {
+          // Desmarca
+          b.selecionada = false;
+          const idx = bolhasSelecionadas.indexOf(b);
+          if (idx > -1) bolhasSelecionadas.splice(idx, 1);
+          return;
+        }
 
-        bolhas.splice(i, 1);
+        b.selecionada = true;
+        bolhasSelecionadas.push(b);
+        tocarSelecao(b.som);
+        criarEstrelinhas(b.x, b.y - b.raio);
 
-        if (acertosNaFase >= acertosNecessarios) {
-          setTimeout(passarDeFase, 700);
-        } else {
+        if (bolhasSelecionadas.length === 3) {
+          // COMPLETOU MISSÃO!
+          bolhasSelecionadas.forEach(sel => {
+            criarParticulas(sel.x, sel.y, sel.cor, 30);
+            const idx = bolhas.indexOf(sel);
+            if (idx > -1) bolhas.splice(idx, 1);
+          });
+          bolhasSelecionadas = [];
+
+          estouradas++;
+          acertosNaFase++;
+          atualizarContador();
+          atualizarBarraProgresso();
+          mostrarCombo('✓', 'rgba(255,220,60,0.95)');
+          tocarTriunfo();
+          ativarFlash();
+
+          // Repõe 3 bolhas
           setTimeout(() => {
             const coresDisp = getCoresDisponiveis();
             const numerosDisp = getNumerosDisponiveis();
-            bolhas.push(criarBolhaMissao(coresDisp, numerosDisp));
-            gerarMissao();
-          }, 500);
+            for (let k = 0; k < 3; k++) {
+              bolhas.push(criarBolhaMissao(coresDisp, numerosDisp));
+            }
+          }, 400);
+
+          if (acertosNaFase >= acertosNecessarios) {
+            setTimeout(passarDeFase, 900);
+          } else {
+            setTimeout(() => gerarMissao(), 600);
+          }
         }
       } else {
+        // ERROU
         b.tremendo = 20;
         tocarErro();
         errosNaFase++;
+        // Reset seleção
+        limparSelecionadas();
       }
       return;
     }

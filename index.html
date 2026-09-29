@@ -12,178 +12,79 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
 .tela { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 1; }
 .tela.ativa { display: flex; }
 
-/* ============ TELA INICIAL ============ */
 #telaInicial { background: linear-gradient(135deg, #667eea 0%, #764ba2 40%, #f093fb 100%); padding: 20px; text-align: center; overflow-y: auto; }
 #telaInicial .bolhas-fundo { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 0; pointer-events: none; }
 .bolha-decorativa { position: absolute; border-radius: 50%; opacity: 0.3; animation: flutuar 8s ease-in-out infinite; }
 @keyframes flutuar { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-30px) scale(1.1); } }
 
-#telaInicial .conteudo {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-  max-width: 600px;
-  padding-top: 40px;
-}
+#telaInicial .conteudo { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%; max-width: 600px; padding-top: 50px; }
 
-.idiomas-topo {
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 12px;
-  z-index: 10;
-}
+.idiomas-topo { position: absolute; top: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; z-index: 10; }
 
-.botao-idioma {
-  font-size: 16px;
-  font-weight: 700;
-  padding: 10px 20px;
-  background: rgba(255, 255, 255, 0.15);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 30px;
-  cursor: pointer;
-  color: white;
-  font-family: inherit;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  backdrop-filter: blur(10px);
-  touch-action: manipulation;
-  letter-spacing: 1px;
-}
+.botao-idioma { font-size: 16px; font-weight: 700; padding: 10px 20px; background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); border-radius: 30px; cursor: pointer; color: white; font-family: inherit; transition: all 0.2s; display: flex; align-items: center; gap: 6px; backdrop-filter: blur(10px); touch-action: manipulation; letter-spacing: 1px; }
 .botao-idioma:active { transform: scale(0.95); }
-.botao-idioma.ativo {
-  background: linear-gradient(135deg, #ffdc3c 0%, #ff9a3c 100%);
-  border-color: transparent;
-  box-shadow: 0 4px 15px rgba(255, 220, 60, 0.5);
-}
+.botao-idioma.ativo { background: linear-gradient(135deg, #ffdc3c 0%, #ff9a3c 100%); border-color: transparent; box-shadow: 0 4px 15px rgba(255,220,60,0.5); }
 
-.botao-config-inicial {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 55px;
-  height: 55px;
-  font-size: 26px;
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 10;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(10px);
-  touch-action: manipulation;
-}
+.botao-config-inicial { position: absolute; top: 20px; right: 20px; width: 55px; height: 55px; font-size: 26px; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.4); border-radius: 50%; cursor: pointer; z-index: 10; transition: all 0.2s; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); touch-action: manipulation; }
 .botao-config-inicial:active { transform: scale(0.9); }
 
-.logo-titulo { font-size: 64px; font-weight: 900; color: white; text-shadow: 0 4px 0 rgba(0,0,0,0.2), 0 8px 20px rgba(0,0,0,0.3); letter-spacing: 2px; line-height: 1; animation: pulsarLogo 3s ease-in-out infinite; }
+.logo-titulo { font-size: 60px; font-weight: 900; color: white; text-shadow: 0 4px 0 rgba(0,0,0,0.2), 0 8px 20px rgba(0,0,0,0.3); letter-spacing: 2px; line-height: 1; animation: pulsarLogo 3s ease-in-out infinite; }
 @keyframes pulsarLogo { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-.logo-sub { font-size: 18px; color: rgba(255,255,255,0.9); font-weight: 400; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
+.logo-sub { font-size: 16px; color: rgba(255,255,255,0.9); font-weight: 400; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px; }
 
-.pergunta {
-  font-size: 20px;
-  font-weight: 700;
-  color: white;
-  margin-top: 15px;
-  margin-bottom: 5px;
-  letter-spacing: 2px;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
+.pergunta { font-size: 18px; font-weight: 700; color: white; margin-top: 10px; margin-bottom: 5px; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 
-.opcoes-aprender {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  width: 100%;
-  padding: 0 10px;
-}
+.opcoes-grupo { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; width: 100%; padding: 0 10px; }
 
-.botao-aprender {
-  flex: 1;
-  min-width: 120px;
-  padding: 18px 12px;
-  background: rgba(255, 255, 255, 0.2);
-  border: 3px solid rgba(255, 255, 255, 0.4);
-  border-radius: 20px;
-  cursor: pointer;
-  font-family: inherit;
-  color: white;
-  font-size: 16px;
-  font-weight: 700;
-  transition: all 0.2s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  letter-spacing: 1px;
-  touch-action: manipulation;
-  backdrop-filter: blur(10px);
-}
-.botao-aprender .emoji { font-size: 36px; line-height: 1; }
-.botao-aprender:active { transform: scale(0.95); }
-.botao-aprender.ativo {
-  background: linear-gradient(135deg, #ffdc3c 0%, #ff9a3c 100%);
-  border-color: transparent;
-  box-shadow: 0 6px 20px rgba(255, 220, 60, 0.5);
-}
+.botao-opcao { flex: 1; min-width: 110px; padding: 16px 12px; background: rgba(255,255,255,0.2); border: 3px solid rgba(255,255,255,0.4); border-radius: 20px; cursor: pointer; font-family: inherit; color: white; font-size: 15px; font-weight: 700; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 8px; letter-spacing: 1px; touch-action: manipulation; backdrop-filter: blur(10px); }
+.botao-opcao .emoji { font-size: 34px; line-height: 1; }
+.botao-opcao:active { transform: scale(0.95); }
+.botao-opcao.ativo { background: linear-gradient(135deg, #ffdc3c 0%, #ff9a3c 100%); border-color: transparent; box-shadow: 0 6px 20px rgba(255,220,60,0.5); }
 
-.botao-iniciar {
-  font-size: 28px;
-  font-weight: 800;
-  padding: 22px 60px;
-  background: linear-gradient(135deg, #ffdc3c 0%, #ff9a3c 100%);
-  color: white;
-  border: none;
-  border-radius: 60px;
-  cursor: pointer;
-  box-shadow: 0 10px 0 #cc7a1e, 0 15px 30px rgba(0,0,0,0.3);
-  transition: all 0.15s;
-  font-family: inherit;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  touch-action: manipulation;
-  margin-top: 15px;
-}
+.botao-iniciar { font-size: 26px; font-weight: 800; padding: 20px 60px; background: linear-gradient(135deg, #ffdc3c 0%, #ff9a3c 100%); color: white; border: none; border-radius: 60px; cursor: pointer; box-shadow: 0 10px 0 #cc7a1e, 0 15px 30px rgba(0,0,0,0.3); transition: all 0.15s; font-family: inherit; letter-spacing: 3px; text-transform: uppercase; touch-action: manipulation; margin-top: 15px; }
 .botao-iniciar:active { transform: translateY(6px); box-shadow: 0 4px 0 #cc7a1e, 0 8px 15px rgba(0,0,0,0.3); }
 
-/* ============ TELA DE JOGO ============ */
 #telaJogo { background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
 #canvas { display: block; width: 100vw; height: 100vh; touch-action: manipulation; }
 .controles-jogo { position: fixed; top: 15px; right: 15px; display: flex; gap: 8px; z-index: 10; }
 .botao-jogo { width: 50px; height: 50px; font-size: 22px; background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); color: white; touch-action: manipulation; font-family: inherit; }
 .botao-jogo:active { transform: scale(0.9); background: rgba(255,255,255,0.3); }
+
 #ui { position: fixed; top: 15px; left: 15px; color: rgba(255,255,255,0.6); font-size: 14px; pointer-events: none; font-weight: 300; letter-spacing: 1px; }
 #estouradas { font-size: 38px; font-weight: 200; color: rgba(255,255,255,0.9); display: block; margin-bottom: 3px; transition: transform 0.2s ease; }
 #estouradas.pulso { transform: scale(1.15); }
 #recorde { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 3px; }
-#fase { position: fixed; top: 15px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.9); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; pointer-events: none; text-align: center; font-weight: 300; z-index: 5; }
+
+#fase { position: fixed; top: 90px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.9); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; pointer-events: none; text-align: center; font-weight: 300; z-index: 5; }
 #fase .titulo { font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 3px; }
-#fase .numero { font-size: 28px; font-weight: 300; display: block; margin: 2px 0; }
-#progresso { width: 140px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; margin: 6px auto 0; overflow: hidden; }
-#barra { height: 100%; width: 0%; background: linear-gradient(90deg, #ffdc3c, #ff465a); transition: width 0.4s ease; border-radius: 2px; }
+#fase .numero { font-size: 22px; font-weight: 600; display: block; margin: 2px 0; color: #ffdc3c; }
+
+#progressoWrap { width: 220px; height: 8px; background: rgba(255,255,255,0.15); border-radius: 4px; margin: 6px auto 0; overflow: hidden; }
+#barra { height: 100%; width: 0%; background: linear-gradient(90deg, #ffdc3c, #ff9a3c); transition: width 0.4s ease; border-radius: 4px; }
+
+#missaoTopo { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); color: white; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; pointer-events: none; text-align: center; font-weight: 700; z-index: 5; padding: 10px 24px; background: rgba(255,220,60,0.15); border: 2px solid rgba(255,220,60,0.5); border-radius: 30px; backdrop-filter: blur(10px); }
+#missaoTopo .missaoLabel { font-size: 10px; color: rgba(255,255,255,0.6); letter-spacing: 3px; display: block; margin-bottom: 4px; }
+#missaoTopo .missaoTexto { font-size: 22px; color: #ffdc3c; text-shadow: 0 0 20px rgba(255,220,60,0.6); }
+
 #instrucao { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.5); font-size: 13px; letter-spacing: 2px; text-transform: uppercase; pointer-events: none; animation: fadeInOut 3s ease-in-out infinite; text-align: center; padding: 0 20px; max-width: 90vw; }
 @keyframes fadeInOut { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.9; } }
-#combo { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0); color: rgba(255,255,255,0.95); font-size: 70px; font-weight: 900; pointer-events: none; transition: transform 0.4s, opacity 0.6s; opacity: 0; text-shadow: 0 0 40px rgba(255,220,60,0.8); text-align: center; z-index: 8; }
-#combo.mostrar { transform: translate(-50%,-50%) scale(1); opacity: 1; }
-#overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); display: flex; align-items: center; justify-content: center; flex-direction: column; color: white; opacity: 0; pointer-events: none; transition: opacity 0.5s; z-index: 20; text-align: center; padding: 20px; }
-#overlay.mostrar { opacity: 1; pointer-events: all; }
-#overlay h1 { font-size: 56px; font-weight: 900; margin-bottom: 20px; text-shadow: 0 0 40px rgba(255,220,60,0.8); letter-spacing: 3px; color: #ffdc3c; }
-#overlay p { font-size: 18px; color: rgba(255,255,255,0.8); letter-spacing: 2px; font-weight: 400; }
-#overlay button { margin-top: 40px; padding: 18px 50px; background: linear-gradient(135deg, #ffdc3c 0%, #ff9a3c 100%); border: none; color: white; font-size: 18px; font-weight: 800; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; border-radius: 50px; transition: all 0.15s; font-family: inherit; box-shadow: 0 6px 0 #cc7a1e; touch-action: manipulation; }
-#overlay button:active { transform: translateY(4px); box-shadow: 0 2px 0 #cc7a1e; }
 
-/* ============ TELA DE CONFIGURAÇÕES ============ */
+#combo { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0); color: rgba(255,255,255,0.95); font-size: 50px; font-weight: 900; pointer-events: none; transition: transform 0.4s, opacity 0.6s; opacity: 0; text-shadow: 0 0 40px rgba(255,220,60,0.8); text-align: center; z-index: 8; padding: 0 20px; }
+#combo.mostrar { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+
+#telaFaseCompleta { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; flex-direction: column; color: white; z-index: 30; text-align: center; padding: 20px; }
+#telaFaseCompleta.ativa { display: flex; }
+#telaFaseCompleta h1 { font-size: 48px; font-weight: 900; margin-bottom: 30px; text-shadow: 0 0 40px rgba(255,220,60,0.8); letter-spacing: 3px; color: #ffdc3c; animation: pulsarLogo 1s ease-in-out infinite; }
+.estrelas-container { display: flex; gap: 15px; margin: 20px 0 30px; }
+.estrela { font-size: 70px; opacity: 0.2; transition: opacity 0.5s, transform 0.5s; }
+.estrela.ativa { opacity: 1; transform: scale(1.1); animation: estrelaBrilhar 1s ease-in-out infinite; }
+@keyframes estrelaBrilhar { 0%, 100% { transform: scale(1.1); } 50% { transform: scale(1.25); } }
+#telaFaseCompleta .mensagem { font-size: 20px; color: rgba(255,255,255,0.9); letter-spacing: 2px; margin-bottom: 40px; font-weight: 400; }
+#botaoContinuar { font-size: 22px; font-weight: 800; padding: 20px 60px; background: linear-gradient(135deg, #ffdc3c 0%, #ff9a3c 100%); border: none; color: white; border-radius: 60px; cursor: pointer; box-shadow: 0 10px 0 #cc7a1e; transition: all 0.15s; font-family: inherit; letter-spacing: 3px; text-transform: uppercase; touch-action: manipulation; }
+#botaoContinuar:active { transform: translateY(6px); box-shadow: 0 4px 0 #cc7a1e; }
+
+#particulasFesta { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 29; }
+
 #telaConfig { background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); padding: 20px; overflow-y: auto; justify-content: flex-start; padding-top: 80px; }
 .config-titulo { font-size: 32px; font-weight: 800; color: white; margin-bottom: 30px; letter-spacing: 2px; text-align: center; }
 .config-item { width: 100%; max-width: 500px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 16px 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; color: white; font-size: 16px; font-weight: 500; letter-spacing: 1px; }
@@ -200,17 +101,23 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
   .logo-titulo { font-size: 44px; }
   .logo-sub { font-size: 13px; letter-spacing: 2px; }
   .botao-iniciar { font-size: 22px; padding: 18px 45px; }
-  .botao-aprender { min-width: 100px; padding: 14px 8px; font-size: 14px; }
-  .botao-aprender .emoji { font-size: 28px; }
+  .botao-opcao { min-width: 95px; padding: 14px 8px; font-size: 13px; }
+  .botao-opcao .emoji { font-size: 26px; }
   .pergunta { font-size: 16px; }
   .botao-idioma { font-size: 14px; padding: 8px 16px; }
-  #overlay h1 { font-size: 40px; }
+  #telaFaseCompleta h1 { font-size: 34px; }
+  .estrela { font-size: 50px; }
+  #botaoContinuar { font-size: 18px; padding: 16px 40px; }
   .config-item { flex-direction: column; align-items: flex-start; gap: 10px; }
   .opcoes { width: 100%; justify-content: space-between; }
   .opcao { flex: 1; padding: 10px 6px; font-size: 13px; }
   .config-titulo { font-size: 24px; }
-  #fase .numero { font-size: 22px; }
+  #fase .numero { font-size: 20px; }
   #estouradas { font-size: 30px; }
+  #missaoTopo .missaoTexto { font-size: 18px; }
+  #missaoTopo { padding: 8px 18px; top: 15px; }
+  #fase { top: 110px; }
+  #progressoWrap { width: 180px; }
 }
 </style>
 </head>
@@ -226,21 +133,23 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
   <div class="conteudo">
     <div class="logo-titulo">Bolha Kids</div>
     <div class="logo-sub" id="subtitulo">Aprender Brincando</div>
+
     <div class="pergunta" id="perguntaAprender">O que aprender?</div>
-    <div class="opcoes-aprender">
-      <button class="botao-aprender ativo" data-modo="numeros">
+    <div class="opcoes-grupo">
+      <button class="botao-opcao ativo" data-aprender="numeros">
         <span class="emoji">🔢</span>
         <span id="labelNumeros">Números</span>
       </button>
-      <button class="botao-aprender" data-modo="cores">
+      <button class="botao-opcao" data-aprender="cores">
         <span class="emoji">🎨</span>
         <span id="labelCores">Cores</span>
       </button>
-      <button class="botao-aprender" data-modo="ambos">
+      <button class="botao-opcao" data-aprender="ambos">
         <span class="emoji">🔢🎨</span>
         <span id="labelAmbos">Ambos</span>
       </button>
     </div>
+
     <button class="botao-iniciar" id="btnIniciar">
       <span id="labelIniciar">▶ Iniciar</span>
     </button>
@@ -255,22 +164,35 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
   </div>
   <div id="ui">
     <span id="estouradas">0</span>
-    <span id="labelBolhas">bolhas</span>
+    <span id="labelBolhas">acertos</span>
     <div id="recorde"><span id="labelRecorde">Recorde:</span> <span id="recordeValor">0</span></div>
+  </div>
+  <div id="missaoTopo">
+    <span class="missaoLabel" id="missaoLabel">MISSÃO</span>
+    <span class="missaoTexto" id="missaoTexto">-</span>
   </div>
   <div id="fase">
     <div class="titulo" id="labelFase">FASE</div>
     <span class="numero" id="numeroFase">1</span>
-    <div id="progresso"><div id="barra"></div></div>
+    <div id="progressoWrap"><div id="barra"></div></div>
+    <div style="font-size:10px; margin-top:4px; color: rgba(255,255,255,0.6);"><span id="acertosFase">0</span>/<span id="acertosNecessarios">10</span></div>
   </div>
   <div id="combo"></div>
-  <div id="overlay">
-    <h1 id="overlayTitulo">FASE COMPLETA!</h1>
-    <p id="overlayTexto">Próxima fase em breve</p>
-    <button id="overlayBotao">Continuar</button>
-  </div>
-  <div id="instrucao">Junte 3 bolhas iguais!</div>
+  <div id="instrucao">Toque na bolha certa!</div>
 </div>
+
+<div id="telaFaseCompleta">
+  <h1 id="tituloFaseCompleta">FASE COMPLETA!</h1>
+  <div class="estrelas-container">
+    <div class="estrela" id="estrela1">⭐</div>
+    <div class="estrela" id="estrela2">⭐</div>
+    <div class="estrela" id="estrela3">⭐</div>
+  </div>
+  <div class="mensagem" id="mensagemFase">Você acertou 12 vezes!</div>
+  <button id="botaoContinuar">Continuar</button>
+</div>
+
+<canvas id="particulasFesta"></canvas>
 
 <div class="tela" id="telaConfig">
   <button class="botao-voltar" id="btnVoltar" title="Voltar">←</button>
@@ -289,24 +211,21 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
       <button class="opcao" data-valor="off" id="opVozOff">Desligada</button>
     </div>
   </div>
-  <div class="config-item">
-    <div class="rotulo"><span class="icone">🧘</span> <span id="labelModo">Modo</span></div>
-    <div class="opcoes" id="opcoesModo">
-      <button class="opcao" data-valor="normal" id="opModoNormal">Normal</button>
-      <button class="opcao" data-valor="zen" id="opModoZen">Zen</button>
-    </div>
-  </div>
 </div>
 
 <script>
 const telaInicial = document.getElementById('telaInicial');
 const telaJogo = document.getElementById('telaJogo');
 const telaConfig = document.getElementById('telaConfig');
+const telaFaseCompleta = document.getElementById('telaFaseCompleta');
 const btnIniciar = document.getElementById('btnIniciar');
 const btnAbrirConfig = document.getElementById('btnAbrirConfig');
 const btnConfig = document.getElementById('btnConfig');
 const btnHome = document.getElementById('btnHome');
 const btnVoltar = document.getElementById('btnVoltar');
+const botaoContinuar = document.getElementById('botaoContinuar');
+const particulasFesta = document.getElementById('particulasFesta');
+const ctxFesta = particulasFesta.getContext('2d');
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -316,29 +235,30 @@ const instrucaoEl = document.getElementById('instrucao');
 const comboEl = document.getElementById('combo');
 const numeroFaseEl = document.getElementById('numeroFase');
 const barraEl = document.getElementById('barra');
-const overlayEl = document.getElementById('overlay');
-const overlayTituloEl = document.getElementById('overlayTitulo');
-const overlayTextoEl = document.getElementById('overlayTexto');
-const overlayBotaoEl = document.getElementById('overlayBotao');
+const missaoTextoEl = document.getElementById('missaoTexto');
+const missaoLabelEl = document.getElementById('missaoLabel');
+const acertosFaseEl = document.getElementById('acertosFase');
+const acertosNecessariosEl = document.getElementById('acertosNecessarios');
 
 let telaAtual = 'inicial';
 let largura = 0, altura = 0;
 let bolhas = [];
 let particulas = [];
 let estouradas = 0;
-let modoZen = false;
 let bolhasSelecionadas = [];
 let fase = 1;
-let combosFeitos = 0;
-let combosNecessarios = 3;
+let acertosNaFase = 0;
+let acertosNecessarios = 10;
+let errosNaFase = 0;
 let jogoPausado = false;
-let velocidadeMultiplicador = 1.0;
+let faseCompleta = false;
 
 let somLigado = true;
 let audioContext = null;
 let vozLigada = true;
 let idioma = 'pt';
 let modoEducativo = 'numeros';
+let missaoAtual = null;
 
 const textos = {
   numeros: {
@@ -346,27 +266,33 @@ const textos = {
     en: { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five' }
   },
   cores: {
-    pt: { 1: 'vermelho', 2: 'azul', 3: 'verde', 4: 'amarelo', 5: 'roxo' },
-    en: { 1: 'red', 2: 'blue', 3: 'green', 4: 'yellow', 5: 'purple' }
+    pt: { vermelho: 'vermelho', azul: 'azul', verde: 'verde', amarelo: 'amarelo', preto: 'preto' },
+    en: { vermelho: 'red', azul: 'blue', verde: 'green', amarelo: 'yellow', preto: 'black' }
   }
 };
+
+const todasCores = [
+  { nome: 'vermelho', cor: 'rgba(255,70,90,0.95)', som: 400 },
+  { nome: 'azul', cor: 'rgba(60,130,255,0.95)', som: 500 },
+  { nome: 'verde', cor: 'rgba(70,220,120,0.95)', som: 600 },
+  { nome: 'amarelo', cor: 'rgba(255,220,60,0.95)', som: 700 },
+  { nome: 'preto', cor: 'rgba(20,20,30,0.95)', som: 300, borda: true }
+];
 
 const traducoes = {
   pt: {
     subtitulo: 'Aprender Brincando',
-    pergunta: 'O que aprender?',
+    perguntaAprender: 'O que aprender?',
     numeros: 'Números',
     cores: 'Cores',
     ambos: 'Ambos',
     iniciar: '▶ Iniciar',
-    bolhas: 'bolhas',
+    acertos: 'acertos',
     recorde: 'Recorde:',
     fase: 'FASE',
-    instrucaoNormal: 'Junte 3 bolhas iguais!',
-    instrucaoZen: 'Toque nas bolhas e ouça!',
+    instrucao: 'Toque na bolha certa!',
+    missaoLabel: 'MISSÃO',
     faseCompleta: 'FASE COMPLETA!',
-    proximaFase: 'Próxima:',
-    combos: 'combos',
     continuar: 'Continuar',
     configTitulo: 'Configurações',
     som: 'Som',
@@ -375,27 +301,33 @@ const traducoes = {
     voz: 'Voz',
     ligada: 'Ligada',
     desligada: 'Desligada',
-    modo: 'Modo',
-    normal: 'Normal',
-    zen: 'Zen',
     vozLigada: 'Voz ligada',
-    portugues: 'Português'
+    portugues: 'Português',
+    muitoBem: 'Muito bem!',
+    tenteDeNovo: 'Tente de novo',
+    encontre: 'Encontre',
+    aCor: 'a cor',
+    oNumero: 'o número',
+    acertou: 'Você acertou',
+    vezes: 'vezes!',
+    estrela1: 'estrela',
+    estrelas: 'estrelas',
+    ganhou: 'Você ganhou',
+    parabens: 'Parabéns!'
   },
   en: {
     subtitulo: 'Learn by Playing',
-    pergunta: 'What to learn?',
+    perguntaAprender: 'What to learn?',
     numeros: 'Numbers',
     cores: 'Colors',
     ambos: 'Both',
     iniciar: '▶ Start',
-    bolhas: 'bubbles',
+    acertos: 'hits',
     recorde: 'Best:',
     fase: 'LEVEL',
-    instrucaoNormal: 'Match 3 equal bubbles!',
-    instrucaoZen: 'Tap the bubbles and listen!',
+    instrucao: 'Tap the correct bubble!',
+    missaoLabel: 'MISSION',
     faseCompleta: 'LEVEL COMPLETE!',
-    proximaFase: 'Next:',
-    combos: 'combos',
     continuar: 'Continue',
     configTitulo: 'Settings',
     som: 'Sound',
@@ -404,21 +336,21 @@ const traducoes = {
     voz: 'Voice',
     ligada: 'On',
     desligada: 'Off',
-    modo: 'Mode',
-    normal: 'Normal',
-    zen: 'Zen',
     vozLigada: 'Voice on',
-    portugues: 'English'
+    portugues: 'English',
+    muitoBem: 'Well done!',
+    tenteDeNovo: 'Try again',
+    encontre: 'Find',
+    aCor: 'the color',
+    oNumero: 'the number',
+    acertou: 'You got',
+    vezes: 'right!',
+    estrela1: 'star',
+    estrelas: 'stars',
+    ganhou: 'You earned',
+    parabens: 'Congratulations!'
   }
 };
-
-const tipos = [
-  { cor: 'rgba(255,70,90,0.9)', numero: 1, nome: 'vermelho-1', som: 400 },
-  { cor: 'rgba(60,130,255,0.9)', numero: 2, nome: 'azul-2', som: 500 },
-  { cor: 'rgba(70,220,120,0.9)', numero: 3, nome: 'verde-3', som: 600 },
-  { cor: 'rgba(255,220,60,0.9)', numero: 4, nome: 'amarelo-4', som: 700 },
-  { cor: 'rgba(180,100,255,0.9)', numero: 5, nome: 'roxo-5', som: 800 },
-];
 
 let recorde = parseInt(localStorage.getItem('recordeBolhas') || '0');
 recordeEl.textContent = recorde;
@@ -426,12 +358,12 @@ recordeEl.textContent = recorde;
 function aplicarTraducoes() {
   const t = traducoes[idioma];
   document.getElementById('subtitulo').textContent = t.subtitulo;
-  document.getElementById('perguntaAprender').textContent = t.pergunta;
+  document.getElementById('perguntaAprender').textContent = t.perguntaAprender;
   document.getElementById('labelNumeros').textContent = t.numeros;
   document.getElementById('labelCores').textContent = t.cores;
   document.getElementById('labelAmbos').textContent = t.ambos;
   document.getElementById('labelIniciar').textContent = t.iniciar;
-  document.getElementById('labelBolhas').textContent = t.bolhas;
+  document.getElementById('labelBolhas').textContent = t.acertos;
   document.getElementById('labelRecorde').textContent = t.recorde;
   document.getElementById('labelFase').textContent = t.fase;
   document.getElementById('labelSom').textContent = t.som;
@@ -440,31 +372,32 @@ function aplicarTraducoes() {
   document.getElementById('labelVoz').textContent = t.voz;
   document.getElementById('opVozOn').textContent = t.ligada;
   document.getElementById('opVozOff').textContent = t.desligada;
-  document.getElementById('labelModo').textContent = t.modo;
-  document.getElementById('opModoNormal').textContent = t.normal;
-  document.getElementById('opModoZen').textContent = t.zen;
   document.getElementById('configTitulo').textContent = t.configTitulo;
-  document.getElementById('overlayTitulo').textContent = t.faseCompleta;
-  document.getElementById('overlayBotao').textContent = t.continuar;
-  // Instrução muda conforme o modo
-  atualizarInstrucao();
+  document.getElementById('instrucao').textContent = t.instrucao;
+  document.getElementById('missaoLabel').textContent = t.missaoLabel;
+  atualizarMissaoTopo();
 }
 
-function atualizarInstrucao() {
+function atualizarMissaoTopo() {
+  if (!missaoAtual) return;
   const t = traducoes[idioma];
-  instrucaoEl.textContent = modoZen ? t.instrucaoZen : t.instrucaoNormal;
+  let texto = '';
+  if (missaoAtual.tipo === 'cor') {
+    texto = t.encontre + ' ' + t.aCor + ' ' + textos.cores[idioma][missaoAtual.valor] + '!';
+  } else if (missaoAtual.tipo === 'numero') {
+    texto = t.encontre + ' ' + t.oNumero + ' ' + textos.numeros[idioma][missaoAtual.valor] + '!';
+  } else if (missaoAtual.tipo === 'ambos') {
+    texto = t.encontre + ' ' + textos.cores[idioma][missaoAtual.cor] + ' ' + textos.numeros[idioma][missaoAtual.numero] + '!';
+  }
+  missaoTextoEl.textContent = texto;
 }
 
 function atualizarBotoesIdioma() {
-  document.querySelectorAll('.botao-idioma').forEach(b => {
-    b.classList.toggle('ativo', b.dataset.idioma === idioma);
-  });
+  document.querySelectorAll('.botao-idioma').forEach(b => b.classList.toggle('ativo', b.dataset.idioma === idioma));
 }
 
 function atualizarBotoesAprender() {
-  document.querySelectorAll('.botao-aprender').forEach(b => {
-    b.classList.toggle('ativo', b.dataset.modo === modoEducativo);
-  });
+  document.querySelectorAll('[data-aprender]').forEach(b => b.classList.toggle('ativo', b.dataset.aprender === modoEducativo));
 }
 
 document.querySelectorAll('.botao-idioma').forEach(b => {
@@ -474,15 +407,13 @@ document.querySelectorAll('.botao-idioma').forEach(b => {
     atualizarBotoesIdioma();
     aplicarTraducoes();
     initAudio();
-    if (vozLigada) {
-      setTimeout(() => falar(traducoes[idioma].portugues), 100);
-    }
+    if (vozLigada) setTimeout(() => falar(traducoes[idioma].portugues), 100);
   });
 });
 
-document.querySelectorAll('.botao-aprender').forEach(b => {
+document.querySelectorAll('[data-aprender]').forEach(b => {
   b.addEventListener('click', () => {
-    modoEducativo = b.dataset.modo;
+    modoEducativo = b.dataset.aprender;
     localStorage.setItem('modoEducativo', modoEducativo);
     atualizarBotoesAprender();
     initAudio();
@@ -499,14 +430,14 @@ document.querySelectorAll('.botao-aprender').forEach(b => {
 function criarBolhasDecorativas() {
   const container = document.getElementById('bolhasFundo');
   container.innerHTML = '';
-  const cores = ['rgba(255,220,60,0.5)','rgba(255,70,90,0.5)','rgba(60,130,255,0.5)','rgba(70,220,120,0.5)','rgba(180,100,255,0.5)'];
+  const coresDeco = ['rgba(255,220,60,0.5)','rgba(255,70,90,0.5)','rgba(60,130,255,0.5)','rgba(70,220,120,0.5)','rgba(0,0,0,0.5)'];
   for (let i = 0; i < 12; i++) {
     const b = document.createElement('div');
     b.className = 'bolha-decorativa';
     const tamanho = 40 + Math.random() * 120;
     b.style.width = tamanho + 'px';
     b.style.height = tamanho + 'px';
-    b.style.background = cores[Math.floor(Math.random() * cores.length)];
+    b.style.background = coresDeco[Math.floor(Math.random() * coresDeco.length)];
     b.style.left = Math.random() * 100 + '%';
     b.style.top = Math.random() * 100 + '%';
     b.style.animationDelay = Math.random() * 8 + 's';
@@ -522,33 +453,46 @@ function irParaTela(nomeTela) {
   telaJogo.classList.remove('ativa');
   telaConfig.classList.remove('ativa');
 
-  if (nomeTela === 'inicial') {
-    telaInicial.classList.add('ativa');
-  } else if (nomeTela === 'jogo') {
-    telaJogo.classList.add('ativa');
-    redimensionar();
-    reiniciarJogo();
-  } else if (nomeTela === 'config') {
-    telaConfig.classList.add('ativa');
-    atualizarBotoesConfig();
-  }
+  if (nomeTela === 'inicial') telaInicial.classList.add('ativa');
+  else if (nomeTela === 'jogo') { telaJogo.classList.add('ativa'); redimensionar(); reiniciarJogo(); }
+  else if (nomeTela === 'config') { telaConfig.classList.add('ativa'); atualizarBotoesConfig(); }
+}
+
+function getCoresDisponiveis() {
+  if (fase <= 2) return todasCores.slice(0, 3);
+  return todasCores;
+}
+
+function getNumerosDisponiveis() {
+  if (fase <= 2) return [1, 2, 3];
+  return [1, 2, 3, 4, 5];
+}
+
+function getNumBolhas() {
+  if (fase <= 2) return 6;
+  if (fase <= 4) return 7;
+  return 8;
 }
 
 function reiniciarJogo() {
   fase = 1;
-  combosFeitos = 0;
-  combosNecessarios = 3;
-  velocidadeMultiplicador = 1.0;
+  acertosNaFase = 0;
+  acertosNecessarios = 10;
+  errosNaFase = 0;
   estouradas = 0;
   bolhas = [];
   particulas = [];
   bolhasSelecionadas = [];
   jogoPausado = false;
+  faseCompleta = false;
   numeroFaseEl.textContent = 1;
+  acertosFaseEl.textContent = 0;
+  acertosNecessariosEl.textContent = 10;
   atualizarContador();
   atualizarBarraProgresso();
-  overlayEl.classList.remove('mostrar');
-  atualizarInstrucao();
+  telaFaseCompleta.classList.remove('ativa');
+  gerarBolhasMissao();
+  gerarMissao();
 }
 
 btnIniciar.addEventListener('click', () => { initAudio(); irParaTela('jogo'); });
@@ -578,20 +522,36 @@ function tocarPop(frequenciaBase = 600) {
   osc.start(agora); osc.stop(agora + 0.15);
 }
 
-function tocarCombo() {
+function tocarErro() {
   if (!somLigado || !audioContext) return;
   const agora = audioContext.currentTime;
-  [880, 1320].forEach((freq, i) => {
+  const osc = audioContext.createOscillator();
+  const ganho = audioContext.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(220, agora);
+  osc.frequency.exponentialRampToValueAtTime(150, agora + 0.2);
+  ganho.gain.setValueAtTime(0.0001, agora);
+  ganho.gain.exponentialRampToValueAtTime(0.1, agora + 0.02);
+  ganho.gain.exponentialRampToValueAtTime(0.0001, agora + 0.2);
+  osc.connect(ganho); ganho.connect(audioContext.destination);
+  osc.start(agora); osc.stop(agora + 0.2);
+}
+
+function tocarFanfarra() {
+  if (!somLigado || !audioContext) return;
+  const agora = audioContext.currentTime;
+  const notas = [523, 659, 784, 1047];
+  notas.forEach((freq, i) => {
     const osc = audioContext.createOscillator();
     const ganho = audioContext.createGain();
-    const inicio = agora + i * 0.08;
-    osc.type = 'sine';
+    const inicio = agora + i * 0.15;
+    osc.type = 'triangle';
     osc.frequency.setValueAtTime(freq, inicio);
     ganho.gain.setValueAtTime(0.0001, inicio);
-    ganho.gain.exponentialRampToValueAtTime(0.12, inicio + 0.01);
-    ganho.gain.exponentialRampToValueAtTime(0.0001, inicio + 0.15);
+    ganho.gain.exponentialRampToValueAtTime(0.2, inicio + 0.02);
+    ganho.gain.exponentialRampToValueAtTime(0.0001, inicio + 0.4);
     osc.connect(ganho); ganho.connect(audioContext.destination);
-    osc.start(inicio); osc.stop(inicio + 0.15);
+    osc.start(inicio); osc.stop(inicio + 0.4);
   });
 }
 
@@ -605,23 +565,36 @@ function falar(texto) {
   window.speechSynthesis.speak(u);
 }
 
-function falarCombo(numero) {
-  if (!vozLigada) return;
+function falarMissao() {
+  if (!missaoAtual) return;
+  const t = traducoes[idioma];
   let texto = '';
-  if (modoEducativo === 'off' || modoEducativo === 'numeros') {
-    texto = textos.numeros[idioma][numero];
-  } else if (modoEducativo === 'cores') {
-    texto = textos.cores[idioma][numero];
-  } else if (modoEducativo === 'ambos') {
-    texto = textos.numeros[idioma][numero] + ', ' + textos.cores[idioma][numero];
-  }
-  if (texto) setTimeout(() => falar(texto), 250);
+  if (missaoAtual.tipo === 'cor') texto = textos.cores[idioma][missaoAtual.valor];
+  else if (missaoAtual.tipo === 'numero') texto = textos.numeros[idioma][missaoAtual.valor];
+  else if (missaoAtual.tipo === 'ambos') texto = textos.numeros[idioma][missaoAtual.numero] + ', ' + textos.cores[idioma][missaoAtual.cor];
+  setTimeout(() => falar(texto), 200);
+}
+
+function falarAcerto() {
+  if (!vozLigada) return;
+  setTimeout(() => falar(traducoes[idioma].muitoBem), 200);
+}
+
+function falarErro() {
+  if (!vozLigada) return;
+  setTimeout(() => falar(traducoes[idioma].tenteDeNovo), 100);
+}
+
+function falarFaseCompleta(estrelas) {
+  if (!vozLigada) return;
+  const t = traducoes[idioma];
+  const nomeEstrela = estrelas === 1 ? t.estrela1 : t.estrelas;
+  setTimeout(() => falar(t.parabens + ' ' + t.ganhou + ' ' + estrelas + ' ' + nomeEstrela), 800);
 }
 
 function atualizarBotoesConfig() {
   document.querySelectorAll('#opcoesSom .opcao').forEach(b => b.classList.toggle('ativa', b.dataset.valor === (somLigado ? 'on' : 'off')));
   document.querySelectorAll('#opcoesVoz .opcao').forEach(b => b.classList.toggle('ativa', b.dataset.valor === (vozLigada ? 'on' : 'off')));
-  document.querySelectorAll('#opcoesModo .opcao').forEach(b => b.classList.toggle('ativa', b.dataset.valor === (modoZen ? 'zen' : 'normal')));
 }
 
 document.getElementById('opcoesSom').addEventListener('click', (e) => {
@@ -638,41 +611,41 @@ document.getElementById('opcoesVoz').addEventListener('click', (e) => {
   if (vozLigada) setTimeout(() => falar(traducoes[idioma].vozLigada), 100);
 });
 
-document.getElementById('opcoesModo').addEventListener('click', (e) => {
-  if (!e.target.classList.contains('opcao')) return;
-  modoZen = e.target.dataset.valor === 'zen';
-  atualizarBotoesConfig();
-  atualizarInstrucao();
-});
-
 function redimensionar() {
   if (!canvas) return;
   largura = canvas.width = window.innerWidth;
   altura = canvas.height = window.innerHeight;
+  particulasFesta.width = window.innerWidth;
+  particulasFesta.height = window.innerHeight;
 }
 window.addEventListener('resize', redimensionar);
+redimensionar();
 
-function criarBolha() {
-  const raio = 35 + Math.random() * 25;
-  const tipo = tipos[Math.floor(Math.random() * tipos.length)];
+function criarBolhaMissao(coresDisp, numerosDisp) {
+  const raio = 42 + Math.random() * 18;
+  const corSorteada = coresDisp[Math.floor(Math.random() * coresDisp.length)];
+  const numeroSorteado = numerosDisp[Math.floor(Math.random() * numerosDisp.length)];
+  const margemX = raio + 20;
+  const margemYTopo = 130;
+  const margemYBaixo = 80;
   return {
     id: Math.random().toString(36).substring(2, 9),
-    x: Math.random() * (largura - raio * 2) + raio,
-    y: altura + raio,
+    x: margemX + Math.random() * (largura - margemX * 2),
+    y: margemYTopo + Math.random() * (altura - margemYTopo - margemYBaixo),
     raio: raio,
-    cor: tipo.cor,
-    numero: tipo.numero,
-    tipoNome: tipo.nome,
-    som: tipo.som,
-    velocidade: (0.4 + Math.random() * 0.5) * velocidadeMultiplicador,
-    oscilacao: Math.random() * Math.PI * 2,
-    oscilacaoVelocidade: 0.01 + Math.random() * 0.02,
+    cor: corSorteada.cor,
+    corNome: corSorteada.nome,
+    som: corSorteada.som,
+    temBorda: corSorteada.borda || false,
+    numero: numeroSorteado,
     selecionada: false,
-    escala: 1.0
+    escala: 1.0,
+    tremendo: 0,
+    nascer: 0
   };
 }
 
-function criarParticulas(x, y, cor, qtd = 15) {
+function criarParticulas(x, y, cor, qtd = 20) {
   for (let i = 0; i < qtd; i++) {
     const ang = (Math.PI * 2 * i) / qtd + Math.random() * 0.5;
     const vel = 2 + Math.random() * 5;
@@ -684,11 +657,13 @@ function mostrarCombo(texto, cor) {
   comboEl.textContent = texto;
   comboEl.style.color = cor || 'rgba(255,255,255,0.95)';
   comboEl.classList.add('mostrar');
-  setTimeout(() => comboEl.classList.remove('mostrar'), 700);
+  setTimeout(() => comboEl.classList.remove('mostrar'), 900);
 }
 
 function atualizarBarraProgresso() {
-  barraEl.style.width = ((combosFeitos / combosNecessarios) * 100) + '%';
+  barraEl.style.width = ((acertosNaFase / acertosNecessarios) * 100) + '%';
+  acertosFaseEl.textContent = acertosNaFase;
+  acertosNecessariosEl.textContent = acertosNecessarios;
 }
 
 function desenhar() {
@@ -700,51 +675,49 @@ function desenhar() {
   if (!jogoPausado) {
     for (let i = bolhas.length - 1; i >= 0; i--) {
       const b = bolhas[i];
-      b.y -= b.velocidade;
-      b.oscilacao += b.oscilacaoVelocidade;
-      b.x += Math.sin(b.oscilacao) * 0.5;
+      if (b.tremendo > 0) b.tremendo -= 1;
+      if (b.nascer < 1) b.nascer += 0.08;
 
       const escalaAlvo = b.selecionada ? 1.15 : 1.0;
       b.escala += (escalaAlvo - b.escala) * 0.15;
 
-      if (b.selecionada) {
-        ctx.beginPath();
-        ctx.arc(b.x, b.y, b.raio * b.escala + 8, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(255,255,255,0.95)';
-        ctx.lineWidth = 4;
-        ctx.stroke();
-      }
+      let offsetX = 0;
+      if (b.tremendo > 0) offsetX = Math.sin(b.tremendo * 1.5) * 8;
 
-      const grad = ctx.createRadialGradient(b.x - b.raio * 0.3, b.y - b.raio * 0.3, b.raio * 0.1, b.x, b.y, b.raio * b.escala);
+      const escalaFinal = b.raio * b.escala * b.nascer;
+
+      const grad = ctx.createRadialGradient(b.x + offsetX - b.raio * 0.3, b.y - b.raio * 0.3, b.raio * 0.1, b.x + offsetX, b.y, escalaFinal);
       grad.addColorStop(0, 'rgba(255,255,255,0.7)');
       grad.addColorStop(0.5, b.cor);
-      grad.addColorStop(1, b.cor.replace('0.9', '0.5'));
+      grad.addColorStop(1, b.cor.replace(/0\.9|0\.95/, '0.5'));
 
       ctx.beginPath();
-      ctx.arc(b.x, b.y, b.raio * b.escala, 0, Math.PI * 2);
+      ctx.arc(b.x + offsetX, b.y, escalaFinal, 0, Math.PI * 2);
       ctx.fillStyle = grad;
       ctx.fill();
 
+      if (b.temBorda) {
+        ctx.beginPath();
+        ctx.arc(b.x + offsetX, b.y, escalaFinal, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+      }
+
       ctx.beginPath();
-      ctx.arc(b.x - b.raio * 0.3, b.y - b.raio * 0.3, b.raio * 0.18, 0, Math.PI * 2);
+      ctx.arc(b.x + offsetX - b.raio * 0.3, b.y - b.raio * 0.3, escalaFinal * 0.18, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(255,255,255,0.6)';
       ctx.fill();
 
       ctx.save();
-      ctx.font = `bold ${b.raio * 0.9}px 'Segoe UI', sans-serif`;
+      ctx.font = `bold ${escalaFinal * 0.9}px 'Segoe UI', sans-serif`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillStyle = 'rgba(0,0,0,0.4)';
-      ctx.fillText(b.numero, b.x + 2, b.y + 2);
+      ctx.fillText(b.numero, b.x + offsetX + 2, b.y + 2);
       ctx.fillStyle = 'rgba(255,255,255,0.95)';
-      ctx.fillText(b.numero, b.x, b.y);
+      ctx.fillText(b.numero, b.x + offsetX, b.y);
       ctx.restore();
-
-      if (b.y + b.raio < 0) {
-        const idx = bolhasSelecionadas.indexOf(b);
-        if (idx > -1) bolhasSelecionadas.splice(idx, 1);
-        bolhas.splice(i, 1);
-      }
     }
   }
 
@@ -754,7 +727,7 @@ function desenhar() {
     if (p.vida <= 0) { particulas.splice(i, 1); continue; }
     ctx.beginPath();
     ctx.arc(p.x, p.y, p.raio * p.vida, 0, Math.PI * 2);
-    ctx.fillStyle = p.cor.replace('0.9', p.vida.toFixed(2));
+    ctx.fillStyle = p.cor.replace(/0\.9|0\.95/, p.vida.toFixed(2));
     ctx.fill();
   }
 
@@ -762,18 +735,52 @@ function desenhar() {
 }
 desenhar();
 
-function gerarBolhas() {
-  if (telaAtual !== 'jogo') { setTimeout(gerarBolhas, 500); return; }
-  if (jogoPausado) { setTimeout(gerarBolhas, 500); return; }
-  const max = modoZen ? 8 : 10;
-  if (bolhas.length < max) bolhas.push(criarBolha());
-  setTimeout(gerarBolhas, modoZen ? 1200 : 800);
+function gerarBolhasMissao() {
+  bolhas = [];
+  const coresDisp = getCoresDisponiveis();
+  const numerosDisp = getNumerosDisponiveis();
+  const qtd = getNumBolhas();
+  for (let i = 0; i < qtd; i++) {
+    bolhas.push(criarBolhaMissao(coresDisp, numerosDisp));
+  }
 }
-gerarBolhas();
 
-function limparSelecionadas() {
-  bolhasSelecionadas.forEach(b => b.selecionada = false);
-  bolhasSelecionadas = [];
+function gerarMissao() {
+  const coresDisp = getCoresDisponiveis();
+  const numerosDisp = getNumerosDisponiveis();
+  const tipo = modoEducativo;
+  let tentativas = 0;
+
+  do {
+    if (tipo === 'numeros') {
+      const numero = numerosDisp[Math.floor(Math.random() * numerosDisp.length)];
+      missaoAtual = { tipo: 'numero', valor: numero };
+    } else if (tipo === 'cores') {
+      const cor = coresDisp[Math.floor(Math.random() * coresDisp.length)];
+      missaoAtual = { tipo: 'cor', valor: cor.nome };
+    } else {
+      const numero = numerosDisp[Math.floor(Math.random() * numerosDisp.length)];
+      const cor = coresDisp[Math.floor(Math.random() * coresDisp.length)];
+      missaoAtual = { tipo: 'ambos', numero: numero, cor: cor.nome };
+    }
+    tentativas++;
+    if (tentativas > 50) break;
+  } while (!existeBolhaParaMissao());
+
+  atualizarMissaoTopo();
+  falarMissao();
+}
+
+function existeBolhaParaMissao() {
+  return bolhas.some(b => verificarMissao(b));
+}
+
+function verificarMissao(b) {
+  if (!missaoAtual) return false;
+  if (missaoAtual.tipo === 'cor') return b.corNome === missaoAtual.valor;
+  if (missaoAtual.tipo === 'numero') return b.numero === missaoAtual.valor;
+  if (missaoAtual.tipo === 'ambos') return b.corNome === missaoAtual.cor && b.numero === missaoAtual.numero;
+  return false;
 }
 
 function atualizarContador() {
@@ -787,93 +794,141 @@ function atualizarContador() {
   }
 }
 
+function calcularEstrelas() {
+  if (errosNaFase <= 1) return 3;
+  if (errosNaFase <= 3) return 2;
+  return 1;
+}
+
+function tocarFanfarraCompleta() {
+  tocarFanfarra();
+}
+
+let festaParticulas = [];
+function iniciarFesta() {
+  festaParticulas = [];
+  const coresFesta = ['#ffdc3c','#ff465a','#3c82ff','#46dc78','#b464ff','#ff9a3c'];
+  for (let i = 0; i < 100; i++) {
+    festaParticulas.push({
+      x: Math.random() * window.innerWidth,
+      y: -20 - Math.random() * 100,
+      vx: (Math.random() - 0.5) * 3,
+      vy: 2 + Math.random() * 4,
+      raio: 4 + Math.random() * 8,
+      cor: coresFesta[Math.floor(Math.random() * coresFesta.length)],
+      rotacao: Math.random() * Math.PI * 2,
+      rotacaoVel: (Math.random() - 0.5) * 0.2,
+      vida: 1.0
+    });
+  }
+}
+
+function desenharFesta() {
+  if (!telaFaseCompleta.classList.contains('ativa')) {
+    ctxFesta.clearRect(0, 0, particulasFesta.width, particulasFesta.height);
+    requestAnimationFrame(desenharFesta);
+    return;
+  }
+  ctxFesta.clearRect(0, 0, particulasFesta.width, particulasFesta.height);
+  for (let i = festaParticulas.length - 1; i >= 0; i--) {
+    const p = festaParticulas[i];
+    p.x += p.vx; p.y += p.vy; p.vy += 0.1; p.rotacao += p.rotacaoVel;
+    if (p.y > particulasFesta.height + 30) {
+      festaParticulas.splice(i, 1);
+      continue;
+    }
+    ctxFesta.save();
+    ctxFesta.translate(p.x, p.y);
+    ctxFesta.rotate(p.rotacao);
+    ctxFesta.fillStyle = p.cor;
+    ctxFesta.fillRect(-p.raio/2, -p.raio/2, p.raio, p.raio * 0.6);
+    ctxFesta.restore();
+  }
+  requestAnimationFrame(desenharFesta);
+}
+desenharFesta();
+
 function passarDeFase() {
+  faseCompleta = true;
   jogoPausado = true;
+
+  const estrelas = calcularEstrelas();
   const t = traducoes[idioma];
-  overlayTituloEl.textContent = t.faseCompleta;
-  overlayTextoEl.textContent = t.proximaFase + ' ' + (combosNecessarios + 2) + ' ' + t.combos;
-  overlayEl.classList.add('mostrar');
+
+  document.getElementById('tituloFaseCompleta').textContent = t.faseCompleta;
+  document.getElementById('mensagemFase').textContent = t.acertou + ' ' + acertosNaFase + ' ' + t.vezes;
+
+  document.getElementById('estrela1').classList.remove('ativa');
+  document.getElementById('estrela2').classList.remove('ativa');
+  document.getElementById('estrela3').classList.remove('ativa');
+
+  setTimeout(() => document.getElementById('estrela1').classList.add('ativa'), 300);
+  if (estrelas >= 2) setTimeout(() => document.getElementById('estrela2').classList.add('ativa'), 700);
+  if (estrelas >= 3) setTimeout(() => document.getElementById('estrela3').classList.add('ativa'), 1100);
+
+  iniciarFesta();
+  tocarFanfarraCompleta();
+  falarFaseCompleta(estrelas);
+
+  telaFaseCompleta.classList.add('ativa');
 }
 
 function proximaFase() {
+  telaFaseCompleta.classList.remove('ativa');
   fase++;
-  combosFeitos = 0;
-  combosNecessarios += 2;
-  velocidadeMultiplicador += 0.2;
+  acertosNaFase = 0;
+  errosNaFase = 0;
+  acertosNecessarios = 10 + (fase - 1) * 2;
   numeroFaseEl.textContent = fase;
   atualizarBarraProgresso();
-  bolhas = []; particulas = []; bolhasSelecionadas = [];
   jogoPausado = false;
-  overlayEl.classList.remove('mostrar');
+  faseCompleta = false;
+  gerarBolhasMissao();
+  gerarMissao();
 }
 
+botaoContinuar.addEventListener('click', proximaFase);
+
 function clicar(x, y) {
-  if (jogoPausado) return;
+  if (jogoPausado || faseCompleta) return;
   initAudio();
 
   for (let i = bolhas.length - 1; i >= 0; i--) {
     const b = bolhas[i];
     if (Math.hypot(x - b.x, y - b.y) < b.raio) {
-      if (modoZen) {
+      if (verificarMissao(b)) {
+        // ACERTOU
         tocarPop(b.som);
-        criarParticulas(b.x, b.y, b.cor);
-        bolhas.splice(i, 1);
+        criarParticulas(b.x, b.y, b.cor, 25);
         estouradas++;
+        acertosNaFase++;
         atualizarContador();
-        // NOVO: fala o número/cor da bolha no modo zen
-        falarCombo(b.numero);
-        return;
-      }
+        atualizarBarraProgresso();
+        falarAcerto();
+        mostrarCombo(traducoes[idioma].muitoBem, b.cor);
 
-      if (b.selecionada) {
-        b.selecionada = false;
-        const idx = bolhasSelecionadas.indexOf(b);
-        if (idx > -1) bolhasSelecionadas.splice(idx, 1);
-        return;
-      }
+        bolhas.splice(i, 1);
 
-      if (bolhasSelecionadas.length === 0) {
-        b.selecionada = true;
-        bolhasSelecionadas.push(b);
-        tocarPop(b.som * 0.8);
-        return;
-      }
-
-      const primeira = bolhasSelecionadas[0];
-
-      if (b.tipoNome === primeira.tipoNome) {
-        b.selecionada = true;
-        bolhasSelecionadas.push(b);
-        tocarPop(b.som * 0.8);
-
-        if (bolhasSelecionadas.length === 3) {
-          estouradas += 3;
-          combosFeitos++;
-          atualizarContador();
-          atualizarBarraProgresso();
-          mostrarCombo('COMBO! +3', primeira.cor);
-          tocarCombo();
-          falarCombo(primeira.numero);
-
-          bolhasSelecionadas.forEach(sel => criarParticulas(sel.x, sel.y, sel.cor, 20));
-          bolhasSelecionadas.forEach(sel => {
-            const idx = bolhas.indexOf(sel);
-            if (idx > -1) bolhas.splice(idx, 1);
-          });
-          bolhasSelecionadas = [];
-
-          if (combosFeitos >= combosNecessarios) setTimeout(passarDeFase, 500);
+        if (acertosNaFase >= acertosNecessarios) {
+          setTimeout(passarDeFase, 700);
+        } else {
+          setTimeout(() => {
+            const coresDisp = getCoresDisponiveis();
+            const numerosDisp = getNumerosDisponiveis();
+            bolhas.push(criarBolhaMissao(coresDisp, numerosDisp));
+            gerarMissao();
+          }, 500);
         }
       } else {
-        limparSelecionadas();
-        b.selecionada = true;
-        bolhasSelecionadas.push(b);
-        tocarPop(b.som * 0.8);
+        // ERROU
+        b.tremendo = 20;
+        tocarErro();
+        falarErro();
+        errosNaFase++;
       }
       return;
     }
   }
-  limparSelecionadas();
 }
 
 canvas.addEventListener('pointerdown', (e) => {
@@ -881,9 +936,6 @@ canvas.addEventListener('pointerdown', (e) => {
   clicar(e.clientX, e.clientY);
 });
 
-overlayBotaoEl.addEventListener('click', proximaFase);
-
-// Inicialização
 const idiomaSalvo = localStorage.getItem('idioma');
 if (idiomaSalvo) idioma = idiomaSalvo;
 

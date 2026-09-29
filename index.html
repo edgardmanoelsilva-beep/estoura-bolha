@@ -303,7 +303,6 @@ const traducoes = {
     desligada: 'Desligada',
     vozLigada: 'Voz ligada',
     portugues: 'Português',
-    tenteDeNovo: 'Tente de novo',
     encontre: 'Encontre',
     aCor: 'a cor',
     oNumero: 'o número',
@@ -337,7 +336,6 @@ const traducoes = {
     desligada: 'Off',
     vozLigada: 'Voice on',
     portugues: 'English',
-    tenteDeNovo: 'Try again',
     encontre: 'Find',
     aCor: 'the color',
     oNumero: 'the number',
@@ -578,8 +576,8 @@ function falarAcerto() {
 }
 
 function falarErro() {
-  if (!vozLigada) return;
-  setTimeout(() => falar(traducoes[idioma].tenteDeNovo), 100);
+  // Voz de erro removida — só tremida + som
+  return;
 }
 
 function falarFaseCompleta(estrelas) {
@@ -913,7 +911,6 @@ function clicar(x, y) {
       } else {
         b.tremendo = 20;
         tocarErro();
-        falarErro();
         errosNaFase++;
       }
       return;

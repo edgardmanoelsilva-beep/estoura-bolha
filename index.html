@@ -55,16 +55,12 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
 #estouradas.pulso { transform: scale(1.25); color: #ffdc3c; }
 #recorde { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 3px; }
 
-#fase { position: fixed; top: 100px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.9); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; pointer-events: none; text-align: center; font-weight: 300; z-index: 5; }
+#fase { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.9); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; pointer-events: none; text-align: center; font-weight: 300; z-index: 5; }
 #fase .titulo { font-size: 10px; color: rgba(255,255,255,0.5); letter-spacing: 3px; }
 #fase .numero { font-size: 22px; font-weight: 600; display: block; margin: 2px 0; color: #ffdc3c; }
 
 #progressoWrap { width: 220px; height: 8px; background: rgba(255,255,255,0.15); border-radius: 4px; margin: 6px auto 0; overflow: hidden; }
 #barra { height: 100%; width: 0%; background: linear-gradient(90deg, #ffdc3c, #ff9a3c); transition: width 0.4s ease; border-radius: 4px; }
-
-#missaoTopo { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); color: white; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; pointer-events: none; text-align: center; font-weight: 700; z-index: 5; padding: 10px 24px; background: rgba(255,220,60,0.15); border: 2px solid rgba(255,220,60,0.5); border-radius: 30px; backdrop-filter: blur(10px); }
-#missaoTopo .missaoLabel { font-size: 10px; color: rgba(255,255,255,0.6); letter-spacing: 3px; display: block; margin-bottom: 4px; }
-#missaoTopo .missaoTexto { font-size: 22px; color: #ffdc3c; text-shadow: 0 0 20px rgba(255,220,60,0.6); }
 
 #instrucao { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.5); font-size: 13px; letter-spacing: 2px; text-transform: uppercase; pointer-events: none; animation: fadeInOut 3s ease-in-out infinite; text-align: center; padding: 0 20px; max-width: 90vw; }
 @keyframes fadeInOut { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.9; } }
@@ -117,9 +113,6 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
   .config-titulo { font-size: 24px; }
   #fase .numero { font-size: 20px; }
   #estouradas { font-size: 32px; }
-  #missaoTopo .missaoTexto { font-size: 18px; }
-  #missaoTopo { padding: 8px 18px; top: 15px; }
-  #fase { top: 110px; }
   #progressoWrap { width: 180px; }
 }
 </style>
@@ -165,12 +158,8 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
   </div>
   <div id="ui">
     <span id="estouradas">0</span>
-    <span id="labelBolhas">missões</span>
+    <span id="labelBolhas">combos</span>
     <div id="recorde"><span id="labelRecorde">Recorde:</span> <span id="recordeValor">0</span></div>
-  </div>
-  <div id="missaoTopo">
-    <span class="missaoLabel" id="missaoLabel">MISSÃO</span>
-    <span class="missaoTexto" id="missaoTexto">-</span>
   </div>
   <div id="fase">
     <div class="titulo" id="labelFase">FASE</div>
@@ -180,7 +169,7 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
   </div>
   <div id="combo"></div>
   <div id="flash"></div>
-  <div id="instrucao">Junte 3 bolhas da missão!</div>
+  <div id="instrucao">Junte 3 bolhas iguais!</div>
 </div>
 
 <div id="telaFaseCompleta">
@@ -190,7 +179,7 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
     <div class="estrela" id="estrela2">⭐</div>
     <div class="estrela" id="estrela3">⭐</div>
   </div>
-  <div class="mensagem" id="mensagemFase">Você acertou 12 vezes!</div>
+  <div class="mensagem" id="mensagemFase">Você completou 12 combos!</div>
   <button id="botaoContinuar">Continuar</button>
 </div>
 
@@ -238,8 +227,6 @@ const instrucaoEl = document.getElementById('instrucao');
 const comboEl = document.getElementById('combo');
 const numeroFaseEl = document.getElementById('numeroFase');
 const barraEl = document.getElementById('barra');
-const missaoTextoEl = document.getElementById('missaoTexto');
-const missaoLabelEl = document.getElementById('missaoLabel');
 const acertosFaseEl = document.getElementById('acertosFase');
 const acertosNecessariosEl = document.getElementById('acertosNecessarios');
 
@@ -261,7 +248,6 @@ let audioContext = null;
 let vozLigada = true;
 let idioma = 'pt';
 let modoEducativo = 'numeros';
-let missaoAtual = null;
 
 const formasPorCor = {
   vermelho: 'circulo',
@@ -295,35 +281,31 @@ const traducoes = {
     subtitulo: 'Aprender Brincando',
     perguntaAprender: 'O que aprender?',
     numeros: 'Números', cores: 'Cores', ambos: 'Ambos',
-    iniciar: '▶ Iniciar', acertos: 'missões', recorde: 'Recorde:',
-    fase: 'FASE', instrucao: 'Junte 3 bolhas da missão!',
-    missaoLabel: 'MISSÃO', faseCompleta: 'FASE COMPLETA!',
+    iniciar: '▶ Iniciar', acertos: 'combos', recorde: 'Recorde:',
+    fase: 'FASE', instrucao: 'Junte 3 bolhas iguais!',
+    faseCompleta: 'FASE COMPLETA!',
     continuar: 'Continuar', configTitulo: 'Configurações',
     som: 'Som', ligado: 'Ligado', desligado: 'Desligado',
     voz: 'Voz', ligada: 'Ligada', desligada: 'Desligada',
     vozLigada: 'Voz ligada', portugues: 'Português',
-    encontre: 'Encontre', aCor: 'a cor', oNumero: 'o número',
-    acertou: 'Você completou', vezes: 'missões!',
+    completou: 'Você completou', vezes: 'combos!',
     estrela1: 'estrela', estrelas: 'estrelas',
-    ganhou: 'Você ganhou', parabens: 'Parabéns!',
-    junte3: 'Junte 3 da mesma missão!'
+    ganhou: 'Você ganhou', parabens: 'Parabéns!'
   },
   en: {
     subtitulo: 'Learn by Playing',
     perguntaAprender: 'What to learn?',
     numeros: 'Numbers', cores: 'Colors', ambos: 'Both',
-    iniciar: '▶ Start', acertos: 'missions', recorde: 'Best:',
-    fase: 'LEVEL', instrucao: 'Match 3 of the mission!',
-    missaoLabel: 'MISSION', faseCompleta: 'LEVEL COMPLETE!',
+    iniciar: '▶ Start', acertos: 'combos', recorde: 'Best:',
+    fase: 'LEVEL', instrucao: 'Match 3 equal bubbles!',
+    faseCompleta: 'LEVEL COMPLETE!',
     continuar: 'Continue', configTitulo: 'Settings',
     som: 'Sound', ligado: 'On', desligado: 'Off',
     voz: 'Voice', ligada: 'On', desligada: 'Off',
     vozLigada: 'Voice on', portugues: 'English',
-    encontre: 'Find', aCor: 'the color', oNumero: 'the number',
-    acertou: 'You completed', vezes: 'missions!',
+    completou: 'You completed', vezes: 'combos!',
     estrela1: 'star', estrelas: 'stars',
-    ganhou: 'You earned', parabens: 'Congratulations!',
-    junte3: 'Match 3 of the mission!'
+    ganhou: 'You earned', parabens: 'Congratulations!'
   }
 };
 
@@ -349,22 +331,6 @@ function aplicarTraducoes() {
   document.getElementById('opVozOff').textContent = t.desligada;
   document.getElementById('configTitulo').textContent = t.configTitulo;
   document.getElementById('instrucao').textContent = t.instrucao;
-  document.getElementById('missaoLabel').textContent = t.missaoLabel;
-  atualizarMissaoTopo();
-}
-
-function atualizarMissaoTopo() {
-  if (!missaoAtual) return;
-  const t = traducoes[idioma];
-  let texto = '';
-  if (missaoAtual.tipo === 'cor') {
-    texto = t.encontre + ' ' + t.aCor + ' ' + textos.cores[idioma][missaoAtual.valor] + '!';
-  } else if (missaoAtual.tipo === 'numero') {
-    texto = t.encontre + ' ' + t.oNumero + ' ' + textos.numeros[idioma][missaoAtual.valor] + '!';
-  } else if (missaoAtual.tipo === 'ambos') {
-    texto = t.encontre + ' ' + textos.cores[idioma][missaoAtual.cor] + ' ' + textos.numeros[idioma][missaoAtual.numero] + '!';
-  }
-  missaoTextoEl.textContent = texto;
 }
 
 function atualizarBotoesIdioma() {
@@ -460,8 +426,7 @@ function reiniciarJogo() {
   atualizarContador();
   atualizarBarraProgresso();
   telaFaseCompleta.classList.remove('ativa');
-  gerarBolhasMissao();
-  gerarMissao();
+  gerarBolhasIniciais();
 }
 
 btnIniciar.addEventListener('click', () => { initAudio(); irParaTela('jogo'); });
@@ -556,30 +521,51 @@ function tocarFanfarra() {
   });
 }
 
-function falar(texto) {
+// VOZ MAIS LENTA — 0.7 (era 0.9)
+function falar(texto, delay = 0) {
   if (!vozLigada) return;
   if (!('speechSynthesis' in window)) return;
+  if (delay > 0) {
+    setTimeout(() => falarAgora(texto), delay);
+  } else {
+    falarAgora(texto);
+  }
+}
+
+function falarAgora(texto) {
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(texto);
   u.lang = idioma === 'pt' ? 'pt-BR' : 'en-US';
-  u.rate = 0.9; u.pitch = 1.1; u.volume = 0.85;
+  u.rate = 0.7;       // mais lento pra criança (era 0.9)
+  u.pitch = 1.05;     // tom amigável
+  u.volume = 0.9;     // um pouco mais alto
   window.speechSynthesis.speak(u);
 }
 
-function falarMissao() {
-  if (!missaoAtual) return;
-  let texto = '';
-  if (missaoAtual.tipo === 'cor') texto = textos.cores[idioma][missaoAtual.valor];
-  else if (missaoAtual.tipo === 'numero') texto = textos.numeros[idioma][missaoAtual.valor];
-  else if (missaoAtual.tipo === 'ambos') texto = textos.numeros[idioma][missaoAtual.numero] + ', ' + textos.cores[idioma][missaoAtual.cor];
-  setTimeout(() => falar(texto), 200);
+// Fala o resultado do combo (cor e/ou número) — COM PAUSA no modo Ambos
+function falarCombo(numero, corNome) {
+  if (!vozLigada) return;
+
+  if (modoEducativo === 'cores') {
+    setTimeout(() => falarAgora(textos.cores[idioma][corNome]), 300);
+  } else if (modoEducativo === 'numeros') {
+    setTimeout(() => falarAgora(textos.numeros[idioma][numero]), 300);
+  } else {
+    // Modo Ambos: fala cor, pausa, fala número
+    setTimeout(() => {
+      falarAgora(textos.cores[idioma][corNome]);
+      setTimeout(() => {
+        falarAgora(textos.numeros[idioma][numero]);
+      }, 900); // pausa de 900ms entre as palavras
+    }, 300);
+  }
 }
 
 function falarFaseCompleta(estrelas) {
   if (!vozLigada) return;
   const t = traducoes[idioma];
   const nomeEstrela = estrelas === 1 ? t.estrela1 : t.estrelas;
-  setTimeout(() => falar(t.parabens + ' ' + t.ganhou + ' ' + estrelas + ' ' + nomeEstrela), 800);
+  setTimeout(() => falarAgora(t.parabens + ' ' + t.ganhou + ' ' + estrelas + ' ' + nomeEstrela), 1000);
 }
 
 function atualizarBotoesConfig() {
@@ -598,7 +584,7 @@ document.getElementById('opcoesVoz').addEventListener('click', (e) => {
   if (!e.target.classList.contains('opcao')) return;
   vozLigada = e.target.dataset.valor === 'on';
   atualizarBotoesConfig();
-  if (vozLigada) setTimeout(() => falar(traducoes[idioma].vozLigada), 100);
+  if (vozLigada) setTimeout(() => falarAgora(traducoes[idioma].vozLigada), 100);
 });
 
 function redimensionar() {
@@ -652,19 +638,34 @@ function desenharForma(forma, x, y, tamanho) {
   ctx.restore();
 }
 
-function criarBolhaMissao(coresDisp, numerosDisp) {
+function criarBolha() {
   const raio = 42 + Math.random() * 18;
-  const corSorteada = coresDisp[Math.floor(Math.random() * coresDisp.length)];
-  const numeroSorteado = numerosDisp[Math.floor(Math.random() * numerosDisp.length)];
+  const corSorteada = getCoresDisponiveis()[Math.floor(Math.random() * getCoresDisponiveis().length)];
+  const numeroSorteado = getNumerosDisponiveis()[Math.floor(Math.random() * getNumerosDisponiveis().length)];
+
+  // Modo Números: bolhas cinza neutras
+  let corFinal, corNomeFinal, somFinal, temBordaFinal;
+  if (modoEducativo === 'numeros') {
+    corFinal = 'rgba(180,180,190,0.95)';
+    corNomeFinal = 'cinza';
+    somFinal = 500;
+    temBordaFinal = false;
+  } else {
+    corFinal = corSorteada.cor;
+    corNomeFinal = corSorteada.nome;
+    somFinal = corSorteada.som;
+    temBordaFinal = corSorteada.borda || false;
+  }
+
   return {
     id: Math.random().toString(36).substring(2, 9),
     x: raio + 20 + Math.random() * (largura - (raio + 20) * 2),
     y: altura + raio,
     raio: raio,
-    cor: corSorteada.cor,
-    corNome: corSorteada.nome,
-    som: corSorteada.som,
-    temBorda: corSorteada.borda || false,
+    cor: corFinal,
+    corNome: corNomeFinal,
+    som: somFinal,
+    temBorda: temBordaFinal,
     numero: numeroSorteado,
     forma: formasPorCor[corSorteada.nome] || 'circulo',
     velocidade: 0.5 + Math.random() * 0.4,
@@ -775,7 +776,7 @@ function desenhar() {
       ctx.fillStyle = 'rgba(255,255,255,0.6)';
       ctx.fill();
 
-      // Conteúdo depende do modo educativo
+      // Conteúdo dentro da bolha conforme o modo
       if (modoEducativo === 'cores') {
         desenharForma(b.forma, b.x + offsetX, b.y, escalaFinal);
       } else if (modoEducativo === 'numeros') {
@@ -789,7 +790,6 @@ function desenhar() {
         ctx.fillText(b.numero, b.x + offsetX, b.y);
         ctx.restore();
       } else {
-        // Ambos
         ctx.save();
         ctx.font = `bold ${escalaFinal * 0.9}px 'Segoe UI', sans-serif`;
         ctx.textAlign = 'center';
@@ -805,12 +805,10 @@ function desenhar() {
         const idx = bolhasSelecionadas.indexOf(b);
         if (idx > -1) bolhasSelecionadas.splice(idx, 1);
         bolhas.splice(i, 1);
-        // Repor bolha
-        setTimeout(() => {
-          if (telaAtual === 'jogo' && !jogoPausado) {
-            bolhas.push(criarBolhaMissao(getCoresDisponiveis(), getNumerosDisponiveis()));
-          }
-        }, 300);
+        // Repõe nova bolha no fundo
+        if (!jogoPausado) {
+          bolhas.push(criarBolha());
+        }
       }
     }
   }
@@ -840,84 +838,14 @@ function desenhar() {
 }
 desenhar();
 
-function gerarBolhasMissao() {
+function gerarBolhasIniciais() {
   bolhas = [];
-  const coresDisp = getCoresDisponiveis();
-  const numerosDisp = getNumerosDisponiveis();
-  for (let i = 0; i < 8; i++) {
-    const b = criarBolhaMissao(coresDisp, numerosDisp);
-    b.y = altura * 0.2 + Math.random() * altura * 0.7;
+  for (let i = 0; i < 10; i++) {
+    const b = criarBolha();
+    // Distribui as bolhas pela tela (algumas já visíveis)
+    b.y = altura * 0.1 + Math.random() * altura * 0.85;
     bolhas.push(b);
   }
-}
-
-function gerarMissao() {
-  const coresDisp = getCoresDisponiveis();
-  const numerosDisp = getNumerosDisponiveis();
-  const tipo = modoEducativo;
-  let tentativas = 0;
-
-  do {
-    if (tipo === 'numeros') {
-      const numero = numerosDisp[Math.floor(Math.random() * numerosDisp.length)];
-      missaoAtual = { tipo: 'numero', valor: numero };
-    } else if (tipo === 'cores') {
-      const cor = coresDisp[Math.floor(Math.random() * coresDisp.length)];
-      missaoAtual = { tipo: 'cor', valor: cor.nome };
-    } else {
-      const numero = numerosDisp[Math.floor(Math.random() * numerosDisp.length)];
-      const cor = coresDisp[Math.floor(Math.random() * coresDisp.length)];
-      missaoAtual = { tipo: 'ambos', numero: numero, cor: cor.nome };
-    }
-    tentativas++;
-    if (tentativas > 50) break;
-  } while (!temBolhaParaMissao());
-
-  // Garante pelo menos 3 bolhas da missão na tela
-  let qtdMissao = bolhas.filter(b => verificarMissao(b)).length;
-  let seguranca = 0;
-  while (qtdMissao < 3 && seguranca < 20) {
-    const idx = Math.floor(Math.random() * bolhas.length);
-    const novaBolha = criarBolhaMissao(coresDisp, numerosDisp);
-    novaBolha.x = bolhas[idx].x;
-    novaBolha.y = bolhas[idx].y;
-    if (missaoAtual.tipo === 'cor') {
-      const cor = coresDisp.find(c => c.nome === missaoAtual.valor);
-      novaBolha.cor = cor.cor;
-      novaBolha.corNome = cor.nome;
-      novaBolha.som = cor.som;
-      novaBolha.temBorda = cor.borda || false;
-      novaBolha.forma = formasPorCor[cor.nome] || 'circulo';
-    } else if (missaoAtual.tipo === 'numero') {
-      novaBolha.numero = missaoAtual.valor;
-    } else {
-      const cor = coresDisp.find(c => c.nome === missaoAtual.cor);
-      novaBolha.cor = cor.cor;
-      novaBolha.corNome = cor.nome;
-      novaBolha.som = cor.som;
-      novaBolha.temBorda = cor.borda || false;
-      novaBolha.forma = formasPorCor[cor.nome] || 'circulo';
-      novaBolha.numero = missaoAtual.numero;
-    }
-    bolhas.splice(idx, 1, novaBolha);
-    qtdMissao = bolhas.filter(b => verificarMissao(b)).length;
-    seguranca++;
-  }
-
-  atualizarMissaoTopo();
-  falarMissao();
-}
-
-function temBolhaParaMissao() {
-  return bolhas.filter(b => verificarMissao(b)).length >= 3;
-}
-
-function verificarMissao(b) {
-  if (!missaoAtual) return false;
-  if (missaoAtual.tipo === 'cor') return b.corNome === missaoAtual.valor;
-  if (missaoAtual.tipo === 'numero') return b.numero === missaoAtual.valor;
-  if (missaoAtual.tipo === 'ambos') return b.corNome === missaoAtual.cor && b.numero === missaoAtual.numero;
-  return false;
 }
 
 function atualizarContador() {
@@ -989,7 +917,7 @@ function passarDeFase() {
   const t = traducoes[idioma];
 
   document.getElementById('tituloFaseCompleta').textContent = t.faseCompleta;
-  document.getElementById('mensagemFase').textContent = t.acertou + ' ' + acertosNaFase + ' ' + t.vezes;
+  document.getElementById('mensagemFase').textContent = t.completou + ' ' + acertosNaFase + ' ' + t.vezes;
 
   document.getElementById('estrela1').classList.remove('ativa');
   document.getElementById('estrela2').classList.remove('ativa');
@@ -1017,8 +945,7 @@ function proximaFase() {
   jogoPausado = false;
   faseCompleta = false;
   bolhasSelecionadas = [];
-  gerarBolhasMissao();
-  gerarMissao();
+  gerarBolhasIniciais();
 }
 
 botaoContinuar.addEventListener('click', proximaFase);
@@ -1028,6 +955,17 @@ function limparSelecionadas() {
   bolhasSelecionadas = [];
 }
 
+// Verifica se duas bolhas são iguais conforme o modo
+function saoIguais(a, b) {
+  if (modoEducativo === 'cores') {
+    return a.corNome === b.corNome;
+  } else if (modoEducativo === 'numeros') {
+    return a.numero === b.numero;
+  } else {
+    return a.corNome === b.corNome && a.numero === b.numero;
+  }
+}
+
 function clicar(x, y) {
   if (jogoPausado || faseCompleta) return;
   initAudio();
@@ -1035,23 +973,38 @@ function clicar(x, y) {
   for (let i = bolhas.length - 1; i >= 0; i--) {
     const b = bolhas[i];
     if (Math.hypot(x - b.x, y - b.y) < b.raio) {
-      if (verificarMissao(b)) {
-        // Acertou uma bolha da missão
-        if (b.selecionada) {
-          // Desmarca
-          b.selecionada = false;
-          const idx = bolhasSelecionadas.indexOf(b);
-          if (idx > -1) bolhasSelecionadas.splice(idx, 1);
-          return;
-        }
+      // Se já está selecionada, desmarca
+      if (b.selecionada) {
+        b.selecionada = false;
+        const idx = bolhasSelecionadas.indexOf(b);
+        if (idx > -1) bolhasSelecionadas.splice(idx, 1);
+        return;
+      }
 
+      // Se não tem nenhuma selecionada, seleciona essa
+      if (bolhasSelecionadas.length === 0) {
+        b.selecionada = true;
+        bolhasSelecionadas.push(b);
+        tocarSelecao(b.som);
+        criarEstrelinhas(b.x, b.y - b.raio);
+        return;
+      }
+
+      // Verifica se essa bolha é igual à primeira selecionada
+      const primeira = bolhasSelecionadas[0];
+
+      if (saoIguais(b, primeira)) {
+        // Combina!
         b.selecionada = true;
         bolhasSelecionadas.push(b);
         tocarSelecao(b.som);
         criarEstrelinhas(b.x, b.y - b.raio);
 
         if (bolhasSelecionadas.length === 3) {
-          // COMPLETOU MISSÃO!
+          // COMPLETOU! Estoura as 3
+          const numero = primeira.numero;
+          const corNome = primeira.corNome;
+
           bolhasSelecionadas.forEach(sel => {
             criarParticulas(sel.x, sel.y, sel.cor, 30);
             const idx = bolhas.indexOf(sel);
@@ -1067,27 +1020,25 @@ function clicar(x, y) {
           tocarTriunfo();
           ativarFlash();
 
+          // FALA o resultado (cor e/ou número) — DEPOIS do estouro
+          falarCombo(numero, corNome);
+
           // Repõe 3 bolhas
           setTimeout(() => {
-            const coresDisp = getCoresDisponiveis();
-            const numerosDisp = getNumerosDisponiveis();
             for (let k = 0; k < 3; k++) {
-              bolhas.push(criarBolhaMissao(coresDisp, numerosDisp));
+              bolhas.push(criarBolha());
             }
           }, 400);
 
           if (acertosNaFase >= acertosNecessarios) {
-            setTimeout(passarDeFase, 900);
-          } else {
-            setTimeout(() => gerarMissao(), 600);
+            setTimeout(passarDeFase, 2000);
           }
         }
       } else {
-        // ERROU
+        // Bolha errada — treme e reseta seleção
         b.tremendo = 20;
         tocarErro();
         errosNaFase++;
-        // Reset seleção
         limparSelecionadas();
       }
       return;

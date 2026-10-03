@@ -3,6 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bolha Kids">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/1fae7.png">
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/twitter/twemoji/master/assets/72x72/1fae7.png">
 <title>Bolha Kids - Aprender Brincando</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
@@ -27,6 +35,11 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
 
 .botao-config-inicial { position: absolute; top: 20px; right: 20px; width: 55px; height: 55px; font-size: 26px; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.4); border-radius: 50%; cursor: pointer; z-index: 10; transition: all 0.2s; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); touch-action: manipulation; }
 .botao-config-inicial:active { transform: scale(0.9); }
+
+.botao-instalar { position: absolute; top: 20px; right: 90px; padding: 12px 20px; font-size: 14px; font-weight: 700; background: linear-gradient(135deg, #46dc78 0%, #2a9d4f 100%); border: none; border-radius: 30px; cursor: pointer; color: white; font-family: inherit; letter-spacing: 1px; display: none; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(70,220,120,0.5); touch-action: manipulation; z-index: 10; animation: instalarPulsar 2s ease-in-out infinite; }
+@keyframes instalarPulsar { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+.botao-instalar.visivel { display: flex; }
+.botao-instalar:active { transform: scale(0.95); }
 
 .logo-titulo { font-size: 60px; font-weight: 900; color: white; text-shadow: 0 4px 0 rgba(0,0,0,0.2), 0 8px 20px rgba(0,0,0,0.3); letter-spacing: 2px; line-height: 1; animation: pulsarLogo 3s ease-in-out infinite; }
 @keyframes pulsarLogo { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
@@ -83,23 +96,14 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
 }
 #telaFaseCompleta .conteudoFinal { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }
 #telaFaseCompleta h1 { font-size: 52px; font-weight: 900; margin-bottom: 20px; text-shadow: 0 0 40px rgba(255,220,60,0.8), 0 0 20px rgba(255,255,255,0.5); letter-spacing: 3px; color: #ffdc3c; animation: tituloPular 1s ease-in-out infinite; }
-@keyframes tituloPular {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-8px) scale(1.05); }
-}
+@keyframes tituloPular { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-8px) scale(1.05); } }
 .estrelas-container { display: flex; gap: 15px; margin: 20px 0 25px; }
 .estrela { font-size: 72px; opacity: 0.2; transition: opacity 0.5s, transform 0.5s; display: inline-block; }
 .estrela.ativa { opacity: 1; animation: estrelaGirar 1.5s ease-in-out infinite; }
-@keyframes estrelaGirar {
-  0%, 100% { transform: scale(1.1) rotate(0deg); }
-  50% { transform: scale(1.3) rotate(20deg); }
-}
+@keyframes estrelaGirar { 0%, 100% { transform: scale(1.1) rotate(0deg); } 50% { transform: scale(1.3) rotate(20deg); } }
 #telaFaseCompleta .mensagem { font-size: 22px; color: rgba(255,255,255,0.95); letter-spacing: 2px; margin-bottom: 30px; font-weight: 500; }
 #botaoContinuar { font-size: 22px; font-weight: 800; padding: 20px 60px; background: linear-gradient(135deg, #ffdc3c 0%, #ff9a3c 100%); border: none; color: white; border-radius: 60px; cursor: pointer; box-shadow: 0 10px 0 #cc7a1e; transition: all 0.15s; font-family: inherit; letter-spacing: 3px; text-transform: uppercase; touch-action: manipulation; animation: botaoPulsar 1.2s ease-in-out infinite; position: relative; z-index: 5; }
-@keyframes botaoPulsar {
-  0%, 100% { transform: scale(1); box-shadow: 0 10px 0 #cc7a1e; }
-  50% { transform: scale(1.08); box-shadow: 0 10px 0 #cc7a1e, 0 0 30px rgba(255,220,60,0.7); }
-}
+@keyframes botaoPulsar { 0%, 100% { transform: scale(1); box-shadow: 0 10px 0 #cc7a1e; } 50% { transform: scale(1.08); box-shadow: 0 10px 0 #cc7a1e, 0 0 30px rgba(255,220,60,0.7); } }
 #botaoContinuar:active { transform: translateY(6px); box-shadow: 0 4px 0 #cc7a1e; animation: none; }
 
 #particulasFesta { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 29; }
@@ -124,6 +128,7 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
   .botao-opcao .emoji { font-size: 26px; }
   .pergunta { font-size: 16px; }
   .botao-idioma { font-size: 14px; padding: 8px 16px; }
+  .botao-instalar { font-size: 12px; padding: 10px 14px; right: 80px; }
   #telaFaseCompleta h1 { font-size: 34px; }
   .estrela { font-size: 52px; }
   #botaoContinuar { font-size: 18px; padding: 16px 40px; }
@@ -146,6 +151,7 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
     <button class="botao-idioma ativo" data-idioma="pt">🇧🇷 PT</button>
     <button class="botao-idioma" data-idioma="en">🇺🇸 EN</button>
   </div>
+  <button class="botao-instalar" id="btnInstalar">📲 Instalar</button>
   <button class="botao-config-inicial" id="btnAbrirConfig" title="Configurações">⚙️</button>
   <div class="conteudo">
     <div class="logo-titulo">Bolha Kids</div>
@@ -229,7 +235,8 @@ body { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%
   </div>
 </div>
 
-<script>const telaInicial = document.getElementById('telaInicial');
+<script>
+const telaInicial = document.getElementById('telaInicial');
 const telaJogo = document.getElementById('telaJogo');
 const telaConfig = document.getElementById('telaConfig');
 const telaFaseCompleta = document.getElementById('telaFaseCompleta');
@@ -238,6 +245,7 @@ const btnAbrirConfig = document.getElementById('btnAbrirConfig');
 const btnConfig = document.getElementById('btnConfig');
 const btnHome = document.getElementById('btnHome');
 const btnVoltar = document.getElementById('btnVoltar');
+const btnInstalar = document.getElementById('btnInstalar');
 const botaoContinuar = document.getElementById('botaoContinuar');
 const particulasFesta = document.getElementById('particulasFesta');
 const ctxFesta = particulasFesta.getContext('2d');
@@ -530,23 +538,16 @@ function tocarErro() {
   osc.start(agora); osc.stop(agora + 0.2);
 }
 
-// FANFARRA MAIS LONGA E CONTAGIANTE (8 segundos, tipo "parabéns")
 function tocarFanfarra() {
   if (!somLigado || !audioContext) return;
   const agora = audioContext.currentTime;
   const melodia = [
-    { f: 523, t: 0.0,  d: 0.25 },
-    { f: 523, t: 0.3,  d: 0.25 },
-    { f: 587, t: 0.6,  d: 0.5 },
-    { f: 523, t: 1.2,  d: 0.5 },
-    { f: 698, t: 1.8,  d: 0.5 },
-    { f: 659, t: 2.4,  d: 1.0 },
-    { f: 523, t: 3.6,  d: 0.25 },
-    { f: 523, t: 3.9,  d: 0.25 },
-    { f: 587, t: 4.2,  d: 0.5 },
-    { f: 523, t: 4.8,  d: 0.5 },
-    { f: 784, t: 5.4,  d: 0.5 },
-    { f: 698, t: 6.0,  d: 1.5 }
+    { f: 523, t: 0.0,  d: 0.25 }, { f: 523, t: 0.3,  d: 0.25 },
+    { f: 587, t: 0.6,  d: 0.5 },  { f: 523, t: 1.2,  d: 0.5 },
+    { f: 698, t: 1.8,  d: 0.5 },  { f: 659, t: 2.4,  d: 1.0 },
+    { f: 523, t: 3.6,  d: 0.25 }, { f: 523, t: 3.9,  d: 0.25 },
+    { f: 587, t: 4.2,  d: 0.5 },  { f: 523, t: 4.8,  d: 0.5 },
+    { f: 784, t: 5.4,  d: 0.5 },  { f: 698, t: 6.0,  d: 1.5 }
   ];
   melodia.forEach(nota => {
     const osc = audioContext.createOscillator();
@@ -569,7 +570,7 @@ function falarAgora(texto) {
   const u = new SpeechSynthesisUtterance(texto);
   u.lang = idioma === 'pt' ? 'pt-BR' : 'en-US';
   u.rate = 0.7;
-  u.pitch = 1.2;   // mais animado/agudo
+  u.pitch = 1.2;
   u.volume = 0.95;
   window.speechSynthesis.speak(u);
 }
@@ -631,16 +632,10 @@ function desenharForma(forma, x, y, tamanho) {
   ctx.fillStyle = 'rgba(255,255,255,0.25)';
   ctx.beginPath();
   const r = tamanho * 0.45;
-  if (forma === 'circulo') {
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-  } else if (forma === 'quadrado') {
-    ctx.rect(x - r, y - r, r * 2, r * 2);
-  } else if (forma === 'triangulo') {
-    ctx.moveTo(x, y - r);
-    ctx.lineTo(x + r, y + r);
-    ctx.lineTo(x - r, y + r);
-    ctx.closePath();
-  } else if (forma === 'estrela') {
+  if (forma === 'circulo') ctx.arc(x, y, r, 0, Math.PI * 2);
+  else if (forma === 'quadrado') ctx.rect(x - r, y - r, r * 2, r * 2);
+  else if (forma === 'triangulo') { ctx.moveTo(x, y - r); ctx.lineTo(x + r, y + r); ctx.lineTo(x - r, y + r); ctx.closePath(); }
+  else if (forma === 'estrela') {
     for (let i = 0; i < 5; i++) {
       const ang = (Math.PI * 2 * i) / 5 - Math.PI / 2;
       const x1 = x + Math.cos(ang) * r;
@@ -648,28 +643,20 @@ function desenharForma(forma, x, y, tamanho) {
       const ang2 = ang + Math.PI / 5;
       const x2 = x + Math.cos(ang2) * r * 0.5;
       const y2 = y + Math.sin(ang2) * r * 0.5;
-      if (i === 0) ctx.moveTo(x1, y1);
-      else ctx.lineTo(x1, y1);
+      if (i === 0) ctx.moveTo(x1, y1); else ctx.lineTo(x1, y1);
       ctx.lineTo(x2, y2);
     }
     ctx.closePath();
   } else if (forma === 'losango') {
-    ctx.moveTo(x, y - r);
-    ctx.lineTo(x + r * 0.7, y);
-    ctx.lineTo(x, y + r);
-    ctx.lineTo(x - r * 0.7, y);
-    ctx.closePath();
+    ctx.moveTo(x, y - r); ctx.lineTo(x + r * 0.7, y); ctx.lineTo(x, y + r); ctx.lineTo(x - r * 0.7, y); ctx.closePath();
   }
-  ctx.fill();
-  ctx.stroke();
-  ctx.restore();
+  ctx.fill(); ctx.stroke(); ctx.restore();
 }
 
 function criarBolha() {
   const raio = 42 + Math.random() * 18;
   const corSorteada = getCoresDisponiveis()[Math.floor(Math.random() * getCoresDisponiveis().length)];
   const numeroSorteado = getNumerosDisponiveis()[Math.floor(Math.random() * getNumerosDisponiveis().length)];
-
   let corFinal, corNomeFinal, somFinal, temBordaFinal;
   if (modoEducativo === 'numeros') {
     corFinal = 'rgba(180,180,190,0.95)';
@@ -682,7 +669,6 @@ function criarBolha() {
     somFinal = corSorteada.som;
     temBordaFinal = corSorteada.borda || false;
   }
-
   return {
     id: Math.random().toString(36).substring(2, 9),
     x: raio + 20 + Math.random() * (largura - (raio + 20) * 2),
@@ -716,16 +702,7 @@ function criarEstrelinhas(x, y) {
   for (let i = 0; i < 6; i++) {
     const ang = -Math.PI / 2 + (Math.random() - 0.5) * 1.2;
     const vel = 2 + Math.random() * 3;
-    particulas.push({
-      x: x, y: y,
-      vx: Math.cos(ang) * vel,
-      vy: Math.sin(ang) * vel - 1,
-      raio: 4 + Math.random() * 4,
-      cor: 'rgba(255,220,60,0.95)',
-      vida: 1.0,
-      decaimento: 0.015,
-      estrela: true
-    });
+    particulas.push({ x, y, vx: Math.cos(ang) * vel, vy: Math.sin(ang) * vel - 1, raio: 4 + Math.random() * 4, cor: 'rgba(255,220,60,0.95)', vida: 1.0, decaimento: 0.015, estrela: true });
   }
 }
 
@@ -749,28 +726,21 @@ function atualizarBarraProgresso() {
 
 function desenhar() {
   if (telaAtual !== 'jogo') { requestAnimationFrame(desenhar); return; }
-
   ctx.fillStyle = 'rgba(15,20,40,0.35)';
   ctx.fillRect(0, 0, largura, altura);
-
   if (!jogoPausado) {
     for (let i = bolhas.length - 1; i >= 0; i--) {
       const b = bolhas[i];
       if (b.tremendo > 0) b.tremendo -= 1;
       if (b.nascer < 1) b.nascer += 0.08;
-
       b.y -= b.velocidade;
       b.oscilacao += b.oscilacaoVelocidade;
       b.x += Math.sin(b.oscilacao) * 0.5;
-
       const escalaAlvo = b.selecionada ? 1.18 : 1.0;
       b.escala += (escalaAlvo - b.escala) * 0.15;
-
       let offsetX = 0;
       if (b.tremendo > 0) offsetX = Math.sin(b.tremendo * 1.5) * 8;
-
       const escalaFinal = b.raio * b.escala * b.nascer;
-
       if (b.selecionada) {
         ctx.beginPath();
         ctx.arc(b.x + offsetX, b.y, escalaFinal + 10, 0, Math.PI * 2);
@@ -778,17 +748,14 @@ function desenhar() {
         ctx.lineWidth = 4;
         ctx.stroke();
       }
-
       const grad = ctx.createRadialGradient(b.x + offsetX - b.raio * 0.3, b.y - b.raio * 0.3, b.raio * 0.1, b.x + offsetX, b.y, escalaFinal);
       grad.addColorStop(0, 'rgba(255,255,255,0.7)');
       grad.addColorStop(0.5, b.cor);
       grad.addColorStop(1, b.cor.replace(/0\.9|0\.95/, '0.5'));
-
       ctx.beginPath();
       ctx.arc(b.x + offsetX, b.y, escalaFinal, 0, Math.PI * 2);
       ctx.fillStyle = grad;
       ctx.fill();
-
       if (b.temBorda) {
         ctx.beginPath();
         ctx.arc(b.x + offsetX, b.y, escalaFinal, 0, Math.PI * 2);
@@ -796,12 +763,10 @@ function desenhar() {
         ctx.lineWidth = 3;
         ctx.stroke();
       }
-
       ctx.beginPath();
       ctx.arc(b.x + offsetX - b.raio * 0.3, b.y - b.raio * 0.3, escalaFinal * 0.18, 0, Math.PI * 2);
       ctx.fillStyle = 'rgba(255,255,255,0.6)';
       ctx.fill();
-
       if (modoEducativo === 'cores') {
         desenharForma(b.forma, b.x + offsetX, b.y, escalaFinal);
       } else if (modoEducativo === 'numeros') {
@@ -825,7 +790,6 @@ function desenhar() {
         ctx.fillText(b.numero, b.x + offsetX, b.y);
         ctx.restore();
       }
-
       if (b.y + b.raio < 0) {
         const idx = bolhasSelecionadas.indexOf(b);
         if (idx > -1) bolhasSelecionadas.splice(idx, 1);
@@ -834,7 +798,6 @@ function desenhar() {
       }
     }
   }
-
   for (let i = particulas.length - 1; i >= 0; i--) {
     const p = particulas[i];
     p.x += p.vx; p.y += p.vy; p.vy += 0.15; p.vida -= p.decaimento;
@@ -855,7 +818,6 @@ function desenhar() {
       ctx.fill();
     }
   }
-
   requestAnimationFrame(desenhar);
 }
 desenhar();
@@ -890,7 +852,6 @@ let festaParticulas = [];
 function iniciarFesta() {
   festaParticulas = [];
   const coresFesta = ['#ffdc3c','#ff465a','#3c82ff','#46dc78','#b464ff','#ff9a3c'];
-  // MAIS PARTÍCULAS (300 em vez de 130)
   for (let i = 0; i < 300; i++) {
     festaParticulas.push({
       x: Math.random() * window.innerWidth,
@@ -917,10 +878,7 @@ function desenharFesta() {
   for (let i = festaParticulas.length - 1; i >= 0; i--) {
     const p = festaParticulas[i];
     p.x += p.vx; p.y += p.vy; p.vy += 0.1; p.rotacao += p.rotacaoVel;
-    if (p.y > particulasFesta.height + 30) {
-      festaParticulas.splice(i, 1);
-      continue;
-    }
+    if (p.y > particulasFesta.height + 30) { festaParticulas.splice(i, 1); continue; }
     if (p.tipo === 'estrela') {
       ctxFesta.save();
       ctxFesta.translate(p.x, p.y);
@@ -943,7 +901,6 @@ function desenharFesta() {
 }
 desenharFesta();
 
-// FUNDO ANIMADO (arco-íris suave girando)
 let tempoFundo = 0;
 function desenharFundo() {
   if (!telaFaseCompleta.classList.contains('ativa')) {
@@ -963,7 +920,6 @@ function desenharFundo() {
 }
 desenharFundo();
 
-// EMOJIS DANÇANDO
 function soltarEmojis() {
   emojisFestaEl.innerHTML = '';
   const emojis = ['🎉', '🎊', '🎈', '⭐', '✨', '🌟', '🏆', '💫'];
@@ -980,7 +936,6 @@ function soltarEmojis() {
   }
 }
 
-// FRASE ALEATÓRIA POR FASE
 function pegarFrase(fase) {
   const frases = traducoes[idioma].frases;
   return frases[(fase - 1) % frases.length];
@@ -989,30 +944,22 @@ function pegarFrase(fase) {
 function passarDeFase() {
   faseCompleta = true;
   jogoPausado = true;
-
   const estrelas = calcularEstrelas();
   const t = traducoes[idioma];
   const frase = pegarFrase(fase);
-
   document.getElementById('tituloFaseCompleta').textContent = frase;
   document.getElementById('mensagemFase').textContent = t.completou + ' ' + acertosNaFase + ' ' + t.vezes;
-
   document.getElementById('estrela1').classList.remove('ativa');
   document.getElementById('estrela2').classList.remove('ativa');
   document.getElementById('estrela3').classList.remove('ativa');
-
   setTimeout(() => document.getElementById('estrela1').classList.add('ativa'), 300);
   if (estrelas >= 2) setTimeout(() => document.getElementById('estrela2').classList.add('ativa'), 700);
   if (estrelas >= 3) setTimeout(() => document.getElementById('estrela3').classList.add('ativa'), 1100);
-
   iniciarFesta();
   soltarEmojis();
   tocarFanfarra();
   falarFaseCompleta(frase);
-
   telaFaseCompleta.classList.add('ativa');
-
-  // Solta emojis de novo depois de 2 segundos (onda 2)
   setTimeout(() => { if (telaFaseCompleta.classList.contains('ativa')) soltarEmojis(); }, 2000);
 }
 
@@ -1046,7 +993,6 @@ function saoIguais(a, b) {
 function clicar(x, y) {
   if (jogoPausado || faseCompleta) return;
   initAudio();
-
   for (let i = bolhas.length - 1; i >= 0; i--) {
     const b = bolhas[i];
     if (Math.hypot(x - b.x, y - b.y) < b.raio) {
@@ -1056,7 +1002,6 @@ function clicar(x, y) {
         if (idx > -1) bolhasSelecionadas.splice(idx, 1);
         return;
       }
-
       if (bolhasSelecionadas.length === 0) {
         b.selecionada = true;
         bolhasSelecionadas.push(b);
@@ -1064,26 +1009,21 @@ function clicar(x, y) {
         criarEstrelinhas(b.x, b.y - b.raio);
         return;
       }
-
       const primeira = bolhasSelecionadas[0];
-
       if (saoIguais(b, primeira)) {
         b.selecionada = true;
         bolhasSelecionadas.push(b);
         tocarSelecao(b.som);
         criarEstrelinhas(b.x, b.y - b.raio);
-
         if (bolhasSelecionadas.length === 3) {
           const numero = primeira.numero;
           const corNome = primeira.corNome;
-
           bolhasSelecionadas.forEach(sel => {
             criarParticulas(sel.x, sel.y, sel.cor, 30);
             const idx = bolhas.indexOf(sel);
             if (idx > -1) bolhas.splice(idx, 1);
           });
           bolhasSelecionadas = [];
-
           estouradas++;
           acertosNaFase++;
           atualizarContador();
@@ -1091,13 +1031,8 @@ function clicar(x, y) {
           mostrarCombo('✓', 'rgba(255,220,60,0.95)');
           tocarTriunfo();
           ativarFlash();
-
           falarCombo(numero, corNome);
-
-          setTimeout(() => {
-            for (let k = 0; k < 3; k++) bolhas.push(criarBolha());
-          }, 400);
-
+          setTimeout(() => { for (let k = 0; k < 3; k++) bolhas.push(criarBolha()); }, 400);
           if (acertosNaFase >= acertosNecessarios) {
             setTimeout(passarDeFase, 2200);
           }
@@ -1118,6 +1053,37 @@ canvas.addEventListener('pointerdown', (e) => {
   clicar(e.clientX, e.clientY);
 });
 
+// ============ PWA ============
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  btnInstalar.classList.add('visivel');
+});
+
+btnInstalar.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  btnInstalar.classList.remove('visivel');
+});
+
+window.addEventListener('appinstalled', () => {
+  btnInstalar.classList.remove('visivel');
+  deferredPrompt = null;
+});
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js')
+      .then((reg) => console.log('Service Worker registrado:', reg.scope))
+      .catch((err) => console.error('Erro no Service Worker:', err));
+  });
+}
+
+// ============ INICIALIZAÇÃO ============
 const idiomaSalvo = localStorage.getItem('idioma');
 if (idiomaSalvo) idioma = idiomaSalvo;
 
